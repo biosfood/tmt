@@ -17,8 +17,11 @@
 
 package de.lukas.tmt.calendar
 
+import de.lukas.tmt.Tmt
 import de.lukas.tmt.ui.Styles
 import de.lukas.tmt.ui.UI
+import de.lukas.tmt.ui.util.ListWrapper
+import de.lukas.tmt.ui.util.betterListView
 import tornadofx.*
 import java.sql.Date
 
@@ -32,5 +35,11 @@ class DayView(private val day: Long) : Fragment() {
             }
         }
         label(UI.FULL_DATE_FORMAT.format(Date(day * UI.MILLISECONDS_PER_DAY)))
+        val assignments = ListWrapper(Tmt.config.assignments) {
+            it.filter { assignment ->
+                assignment.isOnDay(day)
+            }
+        }
+        betterListView(assignments, AssignmentView::class, false)
     }
 }

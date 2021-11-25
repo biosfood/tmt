@@ -20,13 +20,15 @@ package de.lukas.tmt.ui.util
 import javafx.beans.Observable
 import javafx.beans.property.Property
 import javafx.collections.ObservableList
+import javafx.event.EventTarget
 import javafx.scene.Parent
-import javafx.scene.control.ScrollPane
+import javafx.scene.paint.Color
 import tornadofx.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
-class BetterListView(list: Observable, private val view: KClass<out Fragment>) : View() {
+class BetterListView(list: Observable, private val view: KClass<out Fragment>, private val scrollable: Boolean = true) :
+    View() {
     override var root: Parent = assemble(listOf<Any>())
 
     init {
@@ -44,22 +46,35 @@ class BetterListView(list: Observable, private val view: KClass<out Fragment>) :
                 list.onChange { root = assemble(list.value as List<*>) }
                 root = assemble(list.value as List<*>)
             }
-            else -> throw RuntimeException("type of $list cannot be displayed in a betterList!")
+            else -> throw RuntimeException("type of $list cannot be displayed in a BetterListView!")
         }
     }
 
-    private fun assemble(list: List<*>): ScrollPane {
-        return scrollpane(true) {
-            addClass("edge-to-edge")
-            vbox {
-                for (item in list) {
-                    if (item is Property<*>) {
-                        this += view.primaryConstructor!!.call(item.value)
-                    } else {
-                        this += view.primaryConstructor!!.call(item)
-                    }
+    private fun assemble(list: List<*>): Parent {
+        val data = vbox {
+            for (item in list) {
+                if (item is Property<*>) {
+                    this += view.primaryConstructor!!.call(item.value)
+                } else {
+                    this += view.primaryConstructor!!.call(item)
                 }
             }
         }
+        if (!scrollable) {
+            return data
+        }
+        return scrollpane(true) {
+            style {
+                baseColor = Color.TRANSPARENT
+                backgroundColor += Color.TRANSPARENT
+                borderWidth += box(0.px)
+            }
+            addClass("edge-to-edge")
+            this += data
+        }
     }
+}
+
+fun EventTarget.betterListView(list: Observable, view: KClass<out Fragment>, scrollable: Boolean = true) {
+    this += BetterListView(list, view, true)
 }

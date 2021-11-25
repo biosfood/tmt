@@ -1,36 +1,20 @@
-/*
- * Copyright 2021 Lukas Eisenhauer
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package de.lukas.tmt.ui.util
 
 import javafx.beans.InvalidationListener
 import javafx.beans.property.Property
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
+import javafx.collections.ObservableList
 import tornadofx.onChange
 
-class PropertyWrapper<U, T>(property: Property<U>, callback: (U) -> T) : Property<T> {
+class ListWrapper<U, T>(property: ObservableList<U>, callback: (ObservableList<U>) -> T) : Property<T> {
     private val changeListeners = mutableListOf<ChangeListener<in T>>()
-    private var value = callback.invoke(property.value)
+    private var value = callback.invoke(property)
 
     init {
         property.onChange {
             val oldValue = value
-            value = callback.invoke(property.value)
+            value = callback.invoke(property)
             for (listener in changeListeners) {
                 listener.changed(this, oldValue, value)
             }

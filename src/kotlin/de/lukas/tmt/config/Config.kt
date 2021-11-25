@@ -21,6 +21,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import de.lukas.tmt.calendar.Assignment
 import de.lukas.tmt.task.Task
 import de.lukas.tmt.util.Util
 import de.lukas.tmt.util.log.Log.log
@@ -31,7 +32,7 @@ import java.io.File
 data class Config(
     @Json(name = "startMaximized") val startMaximized: Boolean = true,
     @Json(name = "tasks") var mutableTasks: MutableList<Task> = mutableListOf(),
-    @Json(name = "assignments") var mutableAssignments: MutableList<Task> = mutableListOf(),
+    @Json(name = "assignments") var mutableAssignments: MutableList<Assignment> = mutableListOf(),
 ) {
     val tasks = mutableTasks.toObservable()
     val assignments = mutableAssignments.toObservable()
