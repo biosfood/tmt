@@ -15,13 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.lukas.tmt
+package de.lukas.tmt.util
 
-import de.lukas.tmt.config.Config
 import de.lukas.tmt.util.log.Log.log
 import de.lukas.tmt.util.log.LogLevels
 
-fun main() {
-    val config = Config.readConfig()
-    log(LogLevels.INFO) { "test value: ${config.test}" }
+object Util {
+    private val osName = System.getProperty("os.name")
+    val TMT_HOME = System.getProperty("user.home") + when {
+        osName.startsWith("Windows") -> "/Appdata/Roaming/tmt/"
+        osName.startsWith("Linux") -> "/.local/share/tmt/"
+        else -> let {
+            log(LogLevels.FATAL) { "unknown os $osName" }
+            ""
+        }
+    }
 }
