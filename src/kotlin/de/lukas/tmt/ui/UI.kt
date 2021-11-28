@@ -15,15 +15,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.lukas.tmt
+package de.lukas.tmt.ui
 
-import de.lukas.tmt.config.Config
-import de.lukas.tmt.ui.UI
-import de.lukas.tmt.util.log.Log.log
-import de.lukas.tmt.util.log.LogLevels
+import javafx.application.Application
+import javafx.fxml.FXMLLoader
+import javafx.scene.Scene
+import javafx.stage.Stage
 
-fun main() {
-    val config = Config.readConfig()
-    log(LogLevels.INFO) { "test value: ${config.test}" }
-    UI.launchUI()
+class UI : Application() {
+    override fun start(stage: Stage) {
+        instance = this
+        stage.title = "tmt"
+        stage.scene = Scene(FXMLLoader().load(UI::class.java.getResourceAsStream("/layout/main.fxml")))
+        stage.show()
+    }
+
+    companion object {
+        lateinit var instance: UI
+
+        fun launchUI() = launch(UI::class.java)
+    }
 }
