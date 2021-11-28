@@ -15,15 +15,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.lukas.tmt
+package de.lukas.tmt.ui
 
-import de.lukas.tmt.config.Config
-import de.lukas.tmt.ui.UI
 import de.lukas.tmt.util.log.Log.log
 import de.lukas.tmt.util.log.LogLevels
+import javafx.fxml.FXML
 
-fun main() {
-    val config = Config.readConfig()
-    log(LogLevels.INFO) { "test value: ${config.test}" }
-    UI.launchUI()
+class UIController {
+    @FXML
+    fun openAbout() {
+        log(LogLevels.VERBOSE) { "opening about page" }
+        UI.instance.hostServices.showDocument("https://github.com/biosfood/tmt")
+    }
 }
