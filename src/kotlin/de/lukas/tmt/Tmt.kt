@@ -21,9 +21,11 @@ import de.lukas.tmt.config.Config
 import de.lukas.tmt.ui.UI
 import de.lukas.tmt.util.log.Log.log
 import de.lukas.tmt.util.log.LogLevels
+import tornadofx.launch
+
 
 fun main() {
     val config = Config.readConfig()
     log(LogLevels.INFO) { "test value: ${config.test}" }
-    UI.launchUI()
+    launch<UI>()
 }
