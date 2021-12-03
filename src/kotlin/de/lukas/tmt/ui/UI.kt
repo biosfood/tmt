@@ -17,22 +17,6 @@
 
 package de.lukas.tmt.ui
 
-import javafx.application.Application
-import javafx.fxml.FXMLLoader
-import javafx.scene.Scene
-import javafx.stage.Stage
+import tornadofx.App
 
-class UI : Application() {
-    override fun start(stage: Stage) {
-        instance = this
-        stage.title = "tmt"
-        stage.scene = Scene(FXMLLoader().load(UI::class.java.getResourceAsStream("/layout/main.fxml")))
-        stage.show()
-    }
-
-    companion object {
-        lateinit var instance: UI
-
-        fun launchUI() = launch(UI::class.java)
-    }
-}
+class UI : App(UIView::class, Styles::class)
