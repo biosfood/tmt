@@ -17,18 +17,27 @@
 
 package de.lukas.tmt.ui
 
-import kfoenix.jfxbutton
-import tornadofx.View
-import tornadofx.button
-import tornadofx.hbox
-import tornadofx.label
+import de.lukas.tmt.Tmt
+import kfoenix.jfxtabpane
+import tornadofx.*
 
-class UIView : View() {
+class MainView : View() {
     override val root = hbox {
-        label("xxx")
-        jfxbutton {
-            text = "button"
+        minWidth = 200.0
+        minHeight = 200.0
+        jfxtabpane {
+            fitToParentWidth()
+            tab("todo") {
+                vbox {
+                    text("todo list")
+                    for (task in Tmt.config.tasks) {
+                        hbox {
+                            text("Task: ")
+                            text(task.description)
+                        }
+                    }
+                }
+            }
         }
-        button("legacy button")
     }
 }
