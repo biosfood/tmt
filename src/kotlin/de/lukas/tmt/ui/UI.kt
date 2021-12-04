@@ -17,6 +17,25 @@
 
 package de.lukas.tmt.ui
 
+import de.lukas.tmt.Tmt
+import de.lukas.tmt.util.log.Log.log
+import de.lukas.tmt.util.log.LogLevels
+import javafx.stage.Stage
 import tornadofx.App
+import kotlin.system.exitProcess
 
-class UI : App(UIView::class, Styles::class)
+class UI : App(MainView::class, Styles::class) {
+    override fun start(stage: Stage) {
+        super.start(stage)
+        if (Tmt.config.startMaximized) {
+            stage.isMaximized = true
+        }
+    }
+
+    override fun stop() {
+        super.stop()
+        log(LogLevels.INFO) { "shutting down on closed window" }
+        Tmt.config.save()
+        exitProcess(0)
+    }
+}

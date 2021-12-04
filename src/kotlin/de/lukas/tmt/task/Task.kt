@@ -15,17 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.lukas.tmt
+package de.lukas.tmt.task
 
-import de.lukas.tmt.config.Config
-import de.lukas.tmt.ui.UI
-import tornadofx.launch
-
-object Tmt {
-    lateinit var config: Config
-}
-
-fun main() {
-    Tmt.config = Config.readConfig()
-    launch<UI>()
-}
+class Task(
+    val description: String,
+)
