@@ -21,21 +21,31 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import de.lukas.tmt.task.Task
 import de.lukas.tmt.util.Util
 import de.lukas.tmt.util.log.Log.log
 import de.lukas.tmt.util.log.LogLevels
 import java.io.File
 
 data class Config(
-    @Json(name = "test") val test: Int = 3,
+    @Json(name = "startMaximized") val startMaximized: Boolean = true,
+    @Json(name = "tasks") val tasks: MutableList<Task> = mutableListOf(),
 ) {
+    fun save() {
+        val file = File(CONFIG_FILE_PATH)
+        log(LogLevels.VERBOSE) { "saving configuration" }
+        file.writeText(MOSHI.toJson(this), Charsets.UTF_8)
+    }
+
     companion object {
+        private val CONFIG_FILE_PATH = "${Util.TMT_HOME}config.json"
+
         @OptIn(ExperimentalStdlibApi::class)
-        private val MOSHI = Moshi.Builder().add(KotlinJsonAdapterFactory()).build().adapter<Config>()
+        private val MOSHI = Moshi.Builder().add(KotlinJsonAdapterFactory()).build().adapter<Config>().indent("  ")
 
         fun readConfig(): Config {
-            log(LogLevels.VERBOSE) { "reading tmt config" }
-            val file = File("${Util.TMT_HOME}config.json")
+            log(LogLevels.VERBOSE) { "reading configuration" }
+            val file = File(CONFIG_FILE_PATH)
             val config = if (file.exists()) {
                 val data = file.readLines()
                 MOSHI.fromJson(data.joinToString(""))!!
@@ -44,7 +54,7 @@ data class Config(
                 File(Util.TMT_HOME).mkdirs()
                 Config()
             }
-            file.writeText(MOSHI.toJson(config), Charsets.UTF_8)
+            config.save()
             return config
         }
     }
