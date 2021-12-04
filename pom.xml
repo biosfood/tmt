@@ -22,6 +22,10 @@
             <id>mavenCentral</id>
             <url>https://repo1.maven.org/maven2/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <build>
@@ -30,7 +34,7 @@
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
-                <version>1.6.0</version>
+                <version>1.5.10</version>
                 <executions>
                     <execution>
                         <id>compile</id>
@@ -69,6 +73,10 @@
             <artifactId>tornadofx</artifactId>
             <version>1.7.20</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.bkenn</groupId>
+            <artifactId>kfoenix</artifactId>
+            <version>0.1.3</version>
+        </dependency>
     </dependencies>
-
 </project>
