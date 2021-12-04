@@ -18,6 +18,7 @@
 package de.lukas.tmt.ui
 
 import de.lukas.tmt.Tmt
+import javafx.geometry.Insets
 import kfoenix.jfxtabpane
 import tornadofx.*
 
@@ -27,16 +28,30 @@ class MainView : View() {
         minHeight = 200.0
         jfxtabpane {
             fitToParentWidth()
-            tab("todo") {
+            tab("tasks") {
                 vbox {
-                    text("todo list")
-                    for (task in Tmt.config.tasks) {
-                        hbox {
-                            text("Task: ")
-                            text(task.description)
+                    label("TODO list") {
+                        addClass(Styles.heading)
+                        fitToParentWidth()
+                    }
+                    // todo: nicer arrangement in a dynamic grid!
+                    vbox {
+                        for (task in Tmt.config.tasks) {
+                            hbox {
+                                label(task.description) {
+                                    addClass(Styles.taskCard)
+                                    fitToParentWidth()
+                                    hboxConstraints {
+                                        margin = Insets(10.0)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
+            }
+            tab("calendar") {
+                label("todo")
             }
         }
     }
