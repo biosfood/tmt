@@ -18,5 +18,5 @@
 package de.lukas.tmt.task
 
 data class Task(
-    val description: String = "",
+    var title: String = "",
 )

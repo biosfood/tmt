@@ -19,17 +19,25 @@ package de.lukas.tmt.ui
 
 import de.lukas.tmt.Tmt
 import javafx.event.EventHandler
+import javafx.scene.control.TextField
 import kfoenix.jfxbutton
-import tornadofx.View
-import tornadofx.text
-import tornadofx.vbox
+import tornadofx.*
 
-class EditTaskView : View("edit task") {
+class EditTaskView : View("Edit task") {
     override val root = vbox {
-        text("Edit Task ")
+        addClass(Styles.root)
+        lateinit var titleField: TextField
+        form {
+            fieldset("Edit Task") {
+                field("Title") {
+                    titleField = textfield(MainView.currentlyEditingTask.title) { }
+                }
+            }
+        }
         jfxbutton("save") {
             onAction = EventHandler {
-                Tmt.config.tasks += MainView.currentlyEditingTask
+                MainView.currentlyEditingTask.title = titleField.text
+                MainView.tasks.refresh()
                 Tmt.config.save()
                 close()
             }

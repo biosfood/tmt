@@ -49,7 +49,15 @@ class Styles : Stylesheet() {
             fill = foreground
         }
 
-        Stylesheet.root {
+        textField {
+            backgroundColor += background
+            fill = foreground
+            textFill = foreground
+            borderWidth += box(0.px, 0.px, 2.px, 0.px)
+            borderColor += box(foreground)
+        }
+
+        root {
             backgroundColor += background
             stroke = textColor
         }
@@ -103,6 +111,7 @@ class Styles : Stylesheet() {
         val heading by cssclass()
         val greenButton by cssclass()
         val redButton by cssclass()
+        val root by cssclass()
 
         val jfxTabPane by cssclass("jfx-tab-pane")
         val tabSelectedLine by cssclass("tab-selected-line")
