@@ -15,8 +15,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.lukas.tmt.task
+package de.lukas.tmt.ui
 
-data class Task(
-    val description: String = "",
-)
+import de.lukas.tmt.Tmt
+import javafx.event.EventHandler
+import kfoenix.jfxbutton
+import tornadofx.View
+import tornadofx.text
+import tornadofx.vbox
+
+class EditTaskView : View("edit task") {
+    override val root = vbox {
+        text("Edit Task ")
+        jfxbutton("save") {
+            onAction = EventHandler {
+                Tmt.config.tasks += MainView.currentlyEditingTask
+                Tmt.config.save()
+                close()
+            }
+        }
+    }
+}
