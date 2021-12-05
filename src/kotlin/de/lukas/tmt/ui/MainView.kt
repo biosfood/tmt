@@ -17,12 +17,24 @@
 
 package de.lukas.tmt.ui
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.lukas.tmt.Tmt
+import de.lukas.tmt.task.Task
+import de.lukas.tmt.util.log.Log.log
+import de.lukas.tmt.util.log.LogLevels
+import javafx.event.EventHandler
 import javafx.geometry.Insets
+import javafx.geometry.Pos
+import javafx.scene.layout.Background
+import javafx.scene.layout.BackgroundFill
+import javafx.scene.layout.CornerRadii
+import javafx.scene.layout.Priority
+import kfoenix.jfxbutton
 import kfoenix.jfxtabpane
 import tornadofx.*
 
-class MainView : View() {
+class MainView : View("tmt") {
     override val root = hbox {
         minWidth = 200.0
         minHeight = 200.0
@@ -33,20 +45,55 @@ class MainView : View() {
                     label("TODO list") {
                         addClass(Styles.heading)
                         fitToParentWidth()
+                        vboxConstraints {
+                            margin = Insets(10.0)
+                        }
                     }
-                    // todo: nicer arrangement in a dynamic grid!
-                    vbox {
-                        for (task in Tmt.config.tasks) {
-                            hbox {
-                                label(task.description) {
-                                    addClass(Styles.taskCard)
-                                    fitToParentWidth()
-                                    hboxConstraints {
-                                        margin = Insets(10.0)
+                    hbox {
+                        alignment = Pos.TOP_RIGHT
+                        jfxbutton {
+                            alignment = Pos.TOP_RIGHT
+                            addClass(Styles.greenButton)
+                            graphic = FontAwesomeIconView(FontAwesomeIcon.PLUS)
+                            (graphic as FontAwesomeIconView).size = "4em"
+                            graphic.addClass(Styles.greenButton)
+                            onAction = EventHandler {
+                                log(LogLevels.INFO) { "adding a new task" }
+                                currentlyEditingTask = Task()
+                                openInternalWindow<EditTaskView>()
+                            }
+                        }
+                    }
+                    listview(Tmt.config.tasks) {
+                        fitToParentHeight()
+                        maxHeightProperty().bind(Tmt.config.tasks.sizeProperty * 67 + 2)
+                        cellFormat {
+                            addClass(Styles.cellFormat)
+                            val task = it
+                            graphic = hbox {
+                                addClass(Styles.taskCard)
+                                label(task.description)
+                                // separator
+                                pane {
+                                    hgrow = Priority.ALWAYS
+                                }
+                                jfxbutton {
+                                    graphic = FontAwesomeIconView(FontAwesomeIcon.TRASH)
+                                    (graphic as FontAwesomeIconView).size = "2em"
+                                    graphic.addClass(Styles.redButton)
+                                    onAction = EventHandler {
+                                        log(LogLevels.INFO) { "removing a task" }
+                                        Tmt.config.tasks.remove(task)
+                                        Tmt.config.save()
                                     }
                                 }
                             }
                         }
+                        style {
+                            backgroundColor += Styles.background
+                            fill = Styles.background
+                        }
+                        background = Background(BackgroundFill(Styles.background, CornerRadii(0.0), Insets(0.0)))
                     }
                 }
             }
@@ -54,5 +101,9 @@ class MainView : View() {
                 label("todo")
             }
         }
+    }
+
+    companion object {
+        lateinit var currentlyEditingTask: Task
     }
 }

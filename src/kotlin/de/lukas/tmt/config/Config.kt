@@ -25,13 +25,16 @@ import de.lukas.tmt.task.Task
 import de.lukas.tmt.util.Util
 import de.lukas.tmt.util.log.Log.log
 import de.lukas.tmt.util.log.LogLevels
+import tornadofx.toObservable
 import java.io.File
 
 data class Config(
     @Json(name = "startMaximized") val startMaximized: Boolean = true,
-    @Json(name = "tasks") val tasks: MutableList<Task> = mutableListOf(),
+    @Json(name = "tasks") var mutableTasks: MutableList<Task> = mutableListOf(),
 ) {
+    val tasks = mutableTasks.toObservable()
     fun save() {
+        mutableTasks = tasks
         val file = File(CONFIG_FILE_PATH)
         log(LogLevels.VERBOSE) { "saving configuration" }
         file.writeText(MOSHI.toJson(this), Charsets.UTF_8)

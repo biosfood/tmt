@@ -40,8 +40,7 @@ import tornadofx.*
 class Styles : Stylesheet() {
     init {
         taskCard {
-            textFill = textColor
-            borderColor += box(border)
+            borderColor += box(foreground)
             borderWidth += box(2.px)
             padding = box(10.px)
         }
@@ -58,6 +57,18 @@ class Styles : Stylesheet() {
         heading {
             fontSize = 3.em
             alignment = Pos.BASELINE_CENTER
+        }
+
+        greenButton {
+            fill = strings
+        }
+
+        redButton {
+            fill = error
+        }
+
+        cellFormat {
+            backgroundColor += background
         }
 
         jfxTabPane {
@@ -90,9 +101,12 @@ class Styles : Stylesheet() {
     companion object {
         val taskCard by cssclass()
         val heading by cssclass()
+        val greenButton by cssclass()
+        val redButton by cssclass()
 
         val jfxTabPane by cssclass("jfx-tab-pane")
         val tabSelectedLine by cssclass("tab-selected-line")
+        val cellFormat by cssclass()
 
         // material oceanic
         val background = c("#263238")
