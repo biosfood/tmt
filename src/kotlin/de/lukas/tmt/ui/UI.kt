@@ -35,7 +35,6 @@ class UI : App(MainView::class, Styles::class) {
     override fun stop() {
         super.stop()
         log(LogLevels.INFO) { "shutting down on closed window" }
-        Tmt.config.save()
         exitProcess(0)
     }
 }
