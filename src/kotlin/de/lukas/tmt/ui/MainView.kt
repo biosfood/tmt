@@ -25,10 +25,7 @@ import de.lukas.tmt.util.log.Log.log
 import de.lukas.tmt.util.log.LogLevels
 import javafx.event.EventHandler
 import javafx.geometry.Insets
-import javafx.geometry.Pos
-import javafx.scene.layout.Background
-import javafx.scene.layout.BackgroundFill
-import javafx.scene.layout.CornerRadii
+import javafx.scene.control.ListView
 import javafx.scene.layout.Priority
 import kfoenix.jfxbutton
 import kfoenix.jfxtabpane
@@ -36,6 +33,7 @@ import tornadofx.*
 
 class MainView : View("tmt") {
     override val root = hbox {
+        addClass(Styles.root)
         minWidth = 200.0
         minHeight = 200.0
         jfxtabpane {
@@ -50,9 +48,10 @@ class MainView : View("tmt") {
                         }
                     }
                     hbox {
-                        alignment = Pos.TOP_RIGHT
+                        pane {
+                            hgrow = Priority.ALWAYS
+                        }
                         jfxbutton {
-                            alignment = Pos.TOP_RIGHT
                             addClass(Styles.greenButton)
                             graphic = FontAwesomeIconView(FontAwesomeIcon.PLUS)
                             (graphic as FontAwesomeIconView).size = "4em"
@@ -60,22 +59,31 @@ class MainView : View("tmt") {
                             onAction = EventHandler {
                                 log(LogLevels.INFO) { "adding a new task" }
                                 currentlyEditingTask = Task()
+                                Tmt.config.tasks += currentlyEditingTask
                                 openInternalWindow<EditTaskView>()
                             }
                         }
                     }
-                    listview(Tmt.config.tasks) {
+                    tasks = listview(Tmt.config.tasks) {
                         fitToParentHeight()
-                        maxHeightProperty().bind(Tmt.config.tasks.sizeProperty * 67 + 2)
+                        maxHeightProperty().bind(Tmt.config.tasks.sizeProperty * 67 + 3)
                         cellFormat {
                             addClass(Styles.cellFormat)
                             val task = it
                             graphic = hbox {
                                 addClass(Styles.taskCard)
-                                label(task.description)
-                                // separator
+                                label(task.title)
                                 pane {
                                     hgrow = Priority.ALWAYS
+                                }
+                                jfxbutton {
+                                    graphic = FontAwesomeIconView(FontAwesomeIcon.GEAR)
+                                    (graphic as FontAwesomeIconView).size = "2em"
+                                    onAction = EventHandler {
+                                        log(LogLevels.INFO) { "editing a task" }
+                                        currentlyEditingTask = task
+                                        openInternalWindow<EditTaskView>()
+                                    }
                                 }
                                 jfxbutton {
                                     graphic = FontAwesomeIconView(FontAwesomeIcon.TRASH)
@@ -89,11 +97,6 @@ class MainView : View("tmt") {
                                 }
                             }
                         }
-                        style {
-                            backgroundColor += Styles.background
-                            fill = Styles.background
-                        }
-                        background = Background(BackgroundFill(Styles.background, CornerRadii(0.0), Insets(0.0)))
                     }
                 }
             }
@@ -105,5 +108,6 @@ class MainView : View("tmt") {
 
     companion object {
         lateinit var currentlyEditingTask: Task
+        lateinit var tasks: ListView<Task>
     }
 }
