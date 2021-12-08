@@ -18,11 +18,13 @@
 package de.lukas.tmt
 
 import de.lukas.tmt.config.Config
+import de.lukas.tmt.task.Task
 import de.lukas.tmt.ui.UI
 import tornadofx.launch
 
 object Tmt {
     lateinit var config: Config
+    lateinit var currentlyEditingTask: Task
 }
 
 fun main() {
