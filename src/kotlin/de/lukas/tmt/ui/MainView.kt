@@ -20,12 +20,14 @@ package de.lukas.tmt.ui
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.lukas.tmt.Tmt
+import de.lukas.tmt.task.EditTaskView
 import de.lukas.tmt.task.Task
+import de.lukas.tmt.task.TaskView
+import de.lukas.tmt.ui.util.BetterListView
 import de.lukas.tmt.util.log.Log.log
 import de.lukas.tmt.util.log.LogLevels
 import javafx.event.EventHandler
 import javafx.geometry.Insets
-import javafx.scene.control.ListView
 import javafx.scene.layout.Priority
 import kfoenix.jfxbutton
 import kfoenix.jfxtabpane
@@ -58,56 +60,18 @@ class MainView : View("tmt") {
                             graphic.addClass(Styles.greenButton)
                             onAction = EventHandler {
                                 log(LogLevels.INFO) { "adding a new task" }
-                                currentlyEditingTask = Task()
-                                Tmt.config.tasks += currentlyEditingTask
-                                openInternalWindow<EditTaskView>()
+                                val task = Task()
+                                Tmt.config.tasks += task
+                                openInternalWindow(EditTaskView(task), owner = parent.scene.root)
                             }
                         }
                     }
-                    tasks = listview(Tmt.config.tasks) {
-                        fitToParentHeight()
-                        maxHeightProperty().bind(Tmt.config.tasks.sizeProperty * 67 + 3)
-                        cellFormat {
-                            addClass(Styles.cellFormat)
-                            val task = it
-                            graphic = hbox {
-                                addClass(Styles.taskCard)
-                                label(task.title)
-                                pane {
-                                    hgrow = Priority.ALWAYS
-                                }
-                                jfxbutton {
-                                    graphic = FontAwesomeIconView(FontAwesomeIcon.GEAR)
-                                    (graphic as FontAwesomeIconView).size = "2em"
-                                    onAction = EventHandler {
-                                        log(LogLevels.INFO) { "editing a task" }
-                                        currentlyEditingTask = task
-                                        openInternalWindow<EditTaskView>()
-                                    }
-                                }
-                                jfxbutton {
-                                    graphic = FontAwesomeIconView(FontAwesomeIcon.TRASH)
-                                    (graphic as FontAwesomeIconView).size = "2em"
-                                    graphic.addClass(Styles.redButton)
-                                    onAction = EventHandler {
-                                        log(LogLevels.INFO) { "removing a task" }
-                                        Tmt.config.tasks.remove(task)
-                                        Tmt.config.save()
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    this += BetterListView(Tmt.config.tasks, TaskView::class)
                 }
             }
             tab("calendar") {
                 label("todo")
             }
         }
-    }
-
-    companion object {
-        lateinit var currentlyEditingTask: Task
-        lateinit var tasks: ListView<Task>
     }
 }
