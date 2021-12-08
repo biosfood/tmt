@@ -15,31 +15,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.lukas.tmt.ui
+package de.lukas.tmt.ui.util
 
-import de.lukas.tmt.Tmt
-import javafx.event.EventHandler
-import javafx.scene.control.TextField
-import kfoenix.jfxbutton
+import javafx.collections.ObservableList
 import tornadofx.*
+import kotlin.reflect.KClass
+import kotlin.reflect.full.primaryConstructor
 
-class EditTaskView : View("Edit task") {
-    override val root = vbox {
-        addClass(Styles.root)
-        lateinit var titleField: TextField
-        form {
-            fieldset("Edit Task") {
-                field("Title") {
-                    titleField = textfield(MainView.currentlyEditingTask.title) { }
-                }
-            }
+class BetterListView<T>(private val list: ObservableList<T>, private val view: KClass<out Fragment>) : View() {
+    init {
+        list.onChange {
+            root = assemble()
         }
-        jfxbutton("save") {
-            onAction = EventHandler {
-                MainView.currentlyEditingTask.title = titleField.text
-                MainView.tasks.refresh()
-                Tmt.config.save()
-                close()
+    }
+
+    override var root = assemble()
+
+    private fun assemble() = scrollpane(true) {
+        vbox {
+            for (item in list) {
+                this += view.primaryConstructor!!.call(item)
             }
         }
     }
