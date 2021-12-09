@@ -29,6 +29,7 @@ import kfoenix.jfxtextarea
 import kfoenix.jfxtextfield
 import tornadofx.*
 import java.time.ZoneId
+import java.util.*
 
 class EditTaskView(private val task: Task) : Fragment("Edit task") {
     override val root = vbox {
@@ -49,7 +50,7 @@ class EditTaskView(private val task: Task) : Fragment("Edit task") {
                 }
                 field("deadline") {
                     date = jfxdatepicker()
-                    date.value = Task.DATE_FORMAT.parse(task.deadline).toInstant()
+                    date.value = Date(task.deadline * Task.MILLISECONDS_PER_DAY).toInstant()
                         .atZone(ZoneId.systemDefault()).toLocalDate()
                     date.defaultColor = Styles.functions
                 }
@@ -60,7 +61,9 @@ class EditTaskView(private val task: Task) : Fragment("Edit task") {
             onAction = EventHandler {
                 task.title = titleField.text
                 task.description = descriptionField.text
-                task.deadline = Task.DATE_FORMAT.format(date.value)
+                task.deadline = date.value.toEpochDay()
+                Tmt.config.tasks.remove(task)
+                Tmt.config.tasks.add(0, task)
                 Tmt.config.save()
                 close()
             }
