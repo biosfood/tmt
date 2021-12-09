@@ -17,15 +17,15 @@
 
 package de.lukas.tmt.task
 
-import java.text.SimpleDateFormat
 import java.util.*
 
 data class Task(
     var title: String = "",
     var description: String = "",
-    var deadline: String = DATE_FORMAT.format(Calendar.getInstance().time)
+    var deadline: Long = today
 ) {
     companion object {
-        val DATE_FORMAT = SimpleDateFormat("dd/MM/yyyy")
+        val MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000
+        val today = Date().time / MILLISECONDS_PER_DAY
     }
 }

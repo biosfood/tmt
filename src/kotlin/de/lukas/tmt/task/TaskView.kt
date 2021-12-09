@@ -32,8 +32,15 @@ class TaskView(private val task: Task) : Fragment() {
     override val root = hbox {
         addClass(Styles.taskCard)
         vbox {
-            label(task.title)
-            label(task.description)
+            label(task.title) {
+                style {
+                    fontSize = 1.25.em
+                }
+            }
+            if (task.description.isNotEmpty()) {
+                label(task.description)
+            }
+            label("days left: ${task.deadline - Task.today}")
         }
         pane {
             hgrow = Priority.ALWAYS
@@ -42,7 +49,6 @@ class TaskView(private val task: Task) : Fragment() {
             graphic = FontAwesomeIconView(FontAwesomeIcon.GEAR)
             (graphic as FontAwesomeIconView).size = "2em"
             onAction = EventHandler {
-                Tmt.currentlyEditingTask = task
                 log(LogLevels.INFO) { "editing a task" }
                 openInternalWindow(EditTaskView(task), owner = parent.scene.root)
             }

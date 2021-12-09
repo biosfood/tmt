@@ -51,6 +51,10 @@ class Styles : Stylesheet() {
             padding = box(10.px)
         }
 
+        scrollPane {
+            borderWidth += box(0.px)
+        }
+
         saveButton {
             backgroundColor += green
             textFill = background
