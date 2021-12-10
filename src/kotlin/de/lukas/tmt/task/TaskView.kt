@@ -29,8 +29,27 @@ import kfoenix.jfxbutton
 import tornadofx.*
 
 class TaskView(private val task: Task) : Fragment() {
+    private val color = (task.deadline - Task.today).let {
+        when {
+            it < 0 -> Styles.error
+            it == 0L -> Styles.red
+            it == 1L -> Styles.orange
+            it == 2L -> Styles.yellow
+            it >= 3 -> Styles.green
+            else -> Styles.foreground
+        }
+    }
+
     override val root = hbox {
         addClass(Styles.taskCard)
+        circle(radius = 10) {
+            style {
+                fill = color
+            }
+        }
+        pane {
+            prefWidth = 10.0
+        }
         vbox {
             label(task.title) {
                 style {
@@ -40,7 +59,11 @@ class TaskView(private val task: Task) : Fragment() {
             if (task.description.isNotEmpty()) {
                 label(task.description)
             }
-            label("days left: ${task.deadline - Task.today}")
+            label("days left: ${task.deadline - Task.today}") {
+                style {
+                    textFill = color
+                }
+            }
         }
         pane {
             hgrow = Priority.ALWAYS
