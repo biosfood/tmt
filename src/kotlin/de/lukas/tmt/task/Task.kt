@@ -22,8 +22,10 @@ import java.util.*
 data class Task(
     var title: String = "",
     var description: String = "",
-    var deadline: Long = today
-) {
+    var deadline: Long = today,
+) : Comparable<Task> {
+    override operator fun compareTo(other: Task): Int = (deadline - other.deadline).toInt()
+
     companion object {
         val MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000
         val today = Date().time / MILLISECONDS_PER_DAY
