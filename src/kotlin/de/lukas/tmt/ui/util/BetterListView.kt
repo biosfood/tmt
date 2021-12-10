@@ -18,6 +18,7 @@
 package de.lukas.tmt.ui.util
 
 import javafx.collections.ObservableList
+import javafx.scene.control.ScrollPane
 import tornadofx.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
@@ -31,10 +32,13 @@ class BetterListView<T>(private val list: ObservableList<T>, private val view: K
 
     override var root = assemble()
 
-    private fun assemble() = scrollpane(true) {
-        vbox {
-            for (item in list) {
-                this += view.primaryConstructor!!.call(item)
+    private fun assemble(): ScrollPane {
+        return scrollpane(true) {
+            addClass("edge-to-edge")
+            vbox {
+                for (item in list) {
+                    this += view.primaryConstructor!!.call(item)
+                }
             }
         }
     }

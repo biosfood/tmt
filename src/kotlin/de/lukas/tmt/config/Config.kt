@@ -34,6 +34,7 @@ data class Config(
 ) {
     val tasks = mutableTasks.toObservable()
     fun save() {
+        tasks.sort()
         mutableTasks = tasks
         val file = File(CONFIG_FILE_PATH)
         log(LogLevels.VERBOSE) { "saving configuration" }
