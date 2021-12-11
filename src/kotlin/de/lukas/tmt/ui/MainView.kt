@@ -20,6 +20,7 @@ package de.lukas.tmt.ui
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.lukas.tmt.Tmt
+import de.lukas.tmt.calendar.DayView
 import de.lukas.tmt.task.EditTaskView
 import de.lukas.tmt.task.Task
 import de.lukas.tmt.task.TaskView
@@ -32,6 +33,7 @@ import javafx.scene.layout.Priority
 import kfoenix.jfxbutton
 import kfoenix.jfxtabpane
 import tornadofx.*
+import java.sql.Date
 
 class MainView : View("tmt") {
     override val root = hbox {
@@ -70,7 +72,19 @@ class MainView : View("tmt") {
                 }
             }
             tab("calendar") {
-                label("todo")
+                vbox {
+                    label("Calendar") {
+                        addClass(Styles.heading)
+                        fitToParentWidth()
+                        vboxConstraints {
+                            margin = Insets(10.0)
+                        }
+                    }
+                    val date = Date(Task.today * Task.MILLISECONDS_PER_DAY).toLocalDate()
+                    val day = date.minusDays(date.dayOfWeek.value.toLong() - 1).toEpochDay()
+                    val days = (day..day + 6).toList().toObservable()
+                    this += BetterListView(days, DayView::class)
+                }
             }
         }
     }

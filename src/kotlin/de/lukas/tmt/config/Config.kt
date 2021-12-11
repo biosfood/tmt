@@ -31,14 +31,20 @@ import java.io.File
 data class Config(
     @Json(name = "startMaximized") val startMaximized: Boolean = true,
     @Json(name = "tasks") var mutableTasks: MutableList<Task> = mutableListOf(),
+    @Json(name = "assignments") var mutableAssignments: MutableList<Task> = mutableListOf(),
 ) {
     val tasks = mutableTasks.toObservable()
+    val assignments = mutableAssignments.toObservable()
+
     fun save() {
         tasks.sort()
-        mutableTasks = tasks
-        val file = File(CONFIG_FILE_PATH)
-        log(LogLevels.VERBOSE) { "saving configuration" }
-        file.writeText(MOSHI.toJson(this), Charsets.UTF_8)
+        Thread {
+            mutableTasks = tasks
+            mutableAssignments = assignments
+            val file = File(CONFIG_FILE_PATH)
+            log(LogLevels.VERBOSE) { "saving configuration" }
+            file.writeText(MOSHI.toJson(this), Charsets.UTF_8)
+        }.start()
     }
 
     companion object {
