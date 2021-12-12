@@ -18,15 +18,13 @@
 package de.lukas.tmt.task
 
 import com.jfoenix.controls.JFXDatePicker
+import com.jfoenix.controls.JFXSlider
 import com.jfoenix.controls.JFXTextArea
 import com.jfoenix.controls.JFXTextField
 import de.lukas.tmt.Tmt
 import de.lukas.tmt.ui.Styles
 import javafx.event.EventHandler
-import kfoenix.jfxbutton
-import kfoenix.jfxdatepicker
-import kfoenix.jfxtextarea
-import kfoenix.jfxtextfield
+import kfoenix.*
 import tornadofx.*
 import java.time.ZoneId
 import java.util.*
@@ -38,6 +36,7 @@ class EditTaskView(private val task: Task) : Fragment("Edit task") {
         lateinit var titleField: JFXTextField
         lateinit var descriptionField: JFXTextArea
         lateinit var date: JFXDatePicker
+        lateinit var progress: JFXSlider
         form {
             fieldset("Edit Task") {
                 field("Title") {
@@ -54,6 +53,14 @@ class EditTaskView(private val task: Task) : Fragment("Edit task") {
                         .atZone(ZoneId.systemDefault()).toLocalDate()
                     date.defaultColor = Styles.functions
                 }
+                pane {
+                    prefHeight = 50.0
+                }
+                field("progress") {
+                    progress = jfxslider {
+                        value = task.progress * 100
+                    }
+                }
             }
         }
         jfxbutton("save") {
@@ -62,6 +69,7 @@ class EditTaskView(private val task: Task) : Fragment("Edit task") {
                 task.title = titleField.text
                 task.description = descriptionField.text
                 task.deadline = date.value.toEpochDay()
+                task.progress = progress.value / 100
                 Tmt.config.tasks.remove(task)
                 Tmt.config.tasks.add(0, task)
                 Tmt.config.save()

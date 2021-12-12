@@ -26,6 +26,7 @@ import de.lukas.tmt.util.log.LogLevels
 import javafx.event.EventHandler
 import javafx.scene.layout.Priority
 import kfoenix.jfxbutton
+import kfoenix.jfxprogressbar
 import tornadofx.*
 
 class TaskView(private val task: Task) : Fragment() {
@@ -58,6 +59,17 @@ class TaskView(private val task: Task) : Fragment() {
             }
             if (task.description.isNotEmpty()) {
                 label(task.description)
+            }
+            hbox {
+                label("progress:   ")
+                vbox {
+                    pane {
+                        prefHeight = 8.0
+                    }
+                    jfxprogressbar {
+                        progress = task.progress
+                    }
+                }
             }
             label("days left: ${task.deadline - Task.today}") {
                 style {
