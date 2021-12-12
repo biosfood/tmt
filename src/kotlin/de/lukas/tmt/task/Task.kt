@@ -23,6 +23,7 @@ data class Task(
     var title: String = "",
     var description: String = "",
     var deadline: Long = today,
+    var progress: Double = 0.0,
 ) : Comparable<Task> {
     override operator fun compareTo(other: Task): Int = (deadline - other.deadline).toInt()
 
