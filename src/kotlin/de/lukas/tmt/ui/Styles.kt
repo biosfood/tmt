@@ -44,7 +44,7 @@ class Styles : Stylesheet() {
             +main
         }
 
-        taskCard {
+        card {
             +main
             borderColor += box(foreground)
             borderWidth += box(2.px)
@@ -98,7 +98,7 @@ class Styles : Stylesheet() {
     }
 
     companion object {
-        val taskCard by cssclass()
+        val card by cssclass()
         val heading by cssclass()
         val greenButton by cssclass()
         val redButton by cssclass()

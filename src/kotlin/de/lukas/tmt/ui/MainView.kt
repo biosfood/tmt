@@ -27,6 +27,7 @@ import de.lukas.tmt.task.TaskView
 import de.lukas.tmt.ui.util.BetterListView
 import de.lukas.tmt.util.log.Log.log
 import de.lukas.tmt.util.log.LogLevels
+import javafx.beans.property.SimpleLongProperty
 import javafx.event.EventHandler
 import javafx.geometry.Insets
 import javafx.scene.layout.Priority
@@ -80,9 +81,34 @@ class MainView : View("tmt") {
                             margin = Insets(10.0)
                         }
                     }
-                    val date = Date(Task.today * Task.MILLISECONDS_PER_DAY).toLocalDate()
-                    val day = date.minusDays(date.dayOfWeek.value.toLong() - 1).toEpochDay()
-                    val days = (day..day + 6).toList().toObservable()
+                    val currentDate = Date(Task.today * Task.MILLISECONDS_PER_DAY).toLocalDate()
+                    val currentDay = currentDate.minusDays(currentDate.dayOfWeek.value.toLong() - 1).toEpochDay()
+                    val days = (SimpleLongProperty(currentDay)..currentDay + 6).toList().toObservable()
+                    hbox {
+                        jfxbutton {
+                            graphic = FontAwesomeIconView(FontAwesomeIcon.MINUS)
+                            (graphic as FontAwesomeIconView).size = "2em"
+                            graphic.addClass(Styles.redButton)
+                            onAction = EventHandler {
+                                log(LogLevels.INFO) { "moving calendar view" }
+                                for (day in days) {
+                                    day -= 7
+                                }
+                            }
+                        }
+                        label()
+                        jfxbutton {
+                            graphic = FontAwesomeIconView(FontAwesomeIcon.PLUS)
+                            (graphic as FontAwesomeIconView).size = "2em"
+                            graphic.addClass(Styles.greenButton)
+                            onAction = EventHandler {
+                                log(LogLevels.INFO) { "moving calendar view" }
+                                for (day in days) {
+                                    day += 7
+                                }
+                            }
+                        }
+                    }
                     this += BetterListView(days, DayView::class)
                 }
             }

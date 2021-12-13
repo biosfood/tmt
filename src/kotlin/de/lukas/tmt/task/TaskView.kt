@@ -42,7 +42,7 @@ class TaskView(private val task: Task) : Fragment() {
     }
 
     override val root = hbox {
-        addClass(Styles.taskCard)
+        addClass(Styles.card)
         circle(radius = 10) {
             style {
                 fill = color
