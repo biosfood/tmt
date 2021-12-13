@@ -17,6 +17,7 @@
 
 package de.lukas.tmt.ui.util
 
+import javafx.beans.property.Property
 import javafx.collections.ObservableList
 import javafx.scene.control.ScrollPane
 import tornadofx.*
@@ -28,6 +29,11 @@ class BetterListView<T>(private val list: ObservableList<T>, private val view: K
         list.onChange {
             root = assemble()
         }
+        for (item in list) {
+            if (item is Property<*>) {
+                item.addListener(ChangeListener { _, _, _ -> root = assemble() })
+            }
+        }
     }
 
     override var root = assemble()
@@ -37,7 +43,11 @@ class BetterListView<T>(private val list: ObservableList<T>, private val view: K
             addClass("edge-to-edge")
             vbox {
                 for (item in list) {
-                    this += view.primaryConstructor!!.call(item)
+                    if (item is Property<*>) {
+                        this += view.primaryConstructor!!.call(item.value)
+                    } else {
+                        this += view.primaryConstructor!!.call(item)
+                    }
                 }
             }
         }
