@@ -25,6 +25,8 @@ import de.lukas.tmt.task.EditTaskView
 import de.lukas.tmt.task.Task
 import de.lukas.tmt.task.TaskView
 import de.lukas.tmt.ui.util.BetterListView
+import de.lukas.tmt.ui.util.PropertyWrapper
+import de.lukas.tmt.ui.util.betterLabel
 import de.lukas.tmt.util.log.Log.log
 import de.lukas.tmt.util.log.LogLevels
 import javafx.beans.property.SimpleLongProperty
@@ -82,8 +84,9 @@ class MainView : View("tmt") {
                         }
                     }
                     val currentDate = Date(Task.today * Task.MILLISECONDS_PER_DAY).toLocalDate()
-                    val currentDay = currentDate.minusDays(currentDate.dayOfWeek.value.toLong() - 1).toEpochDay()
-                    val days = (SimpleLongProperty(currentDay)..currentDay + 6).toList().toObservable()
+                    val currentDay =
+                        SimpleLongProperty(currentDate.minusDays(currentDate.dayOfWeek.value.toLong() - 1).toEpochDay())
+                    val days = (currentDay..currentDay + 6).toList().toObservable()
                     hbox {
                         jfxbutton {
                             graphic = FontAwesomeIconView(FontAwesomeIcon.MINUS)
@@ -91,18 +94,24 @@ class MainView : View("tmt") {
                             graphic.addClass(Styles.redButton)
                             onAction = EventHandler {
                                 log(LogLevels.INFO) { "moving calendar view" }
+                                currentDay -= 7
                                 for (day in days) {
                                     day -= 7
                                 }
                             }
                         }
-                        label()
+                        betterLabel {
+                            this += PropertyWrapper(currentDay) {
+                                Date(it as Long * Task.MILLISECONDS_PER_DAY).toString()
+                            }
+                        }
                         jfxbutton {
                             graphic = FontAwesomeIconView(FontAwesomeIcon.PLUS)
                             (graphic as FontAwesomeIconView).size = "2em"
                             graphic.addClass(Styles.greenButton)
                             onAction = EventHandler {
                                 log(LogLevels.INFO) { "moving calendar view" }
+                                currentDay += 7
                                 for (day in days) {
                                     day += 7
                                 }
