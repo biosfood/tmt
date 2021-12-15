@@ -22,6 +22,8 @@ import de.lukas.tmt.util.log.Log.log
 import de.lukas.tmt.util.log.LogLevels
 import javafx.stage.Stage
 import tornadofx.App
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.system.exitProcess
 
 class UI : App(MainView::class, Styles::class) {
@@ -36,5 +38,13 @@ class UI : App(MainView::class, Styles::class) {
         super.stop()
         log(LogLevels.INFO) { "shutting down on closed window" }
         exitProcess(0)
+    }
+
+    companion object {
+        const val MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000
+        val today = Date().time / MILLISECONDS_PER_DAY
+
+        val SHORT_DATE_FORMAT = SimpleDateFormat("dd.MM.yy")
+        val FULL_DATE_FORMAT = SimpleDateFormat("EEEE, dd.MM.yy")
     }
 }

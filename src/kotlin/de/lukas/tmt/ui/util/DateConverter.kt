@@ -15,15 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.lukas.tmt.task
+package de.lukas.tmt.ui.util
 
 import de.lukas.tmt.ui.UI
+import javafx.util.StringConverter
+import java.text.DateFormat
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.*
 
-data class Task(
-    var title: String = "",
-    var description: String = "",
-    var deadline: Long = UI.today,
-    var progress: Double = 0.0,
-) : Comparable<Task> {
-    override operator fun compareTo(other: Task): Int = (deadline - other.deadline).toInt()
+class DateConverter(private val dateFormat: DateFormat) : StringConverter<LocalDate>() {
+    override fun toString(localDate: LocalDate?): String =
+        dateFormat.format(Date((localDate?.toEpochDay() ?: UI.today) * UI.MILLISECONDS_PER_DAY))
+
+    override fun fromString(string: String?): LocalDate {
+        return dateFormat.parse(string).toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+    }
 }

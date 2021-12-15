@@ -17,9 +17,9 @@
 
 package de.lukas.tmt.calendar
 
-import de.lukas.tmt.task.Task
+import de.lukas.tmt.ui.UI
 
 data class Assignment(
     val name: String = "",
-    val date: Long = Task.today,
+    val date: Long = UI.today,
 )

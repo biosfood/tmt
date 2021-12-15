@@ -21,6 +21,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.lukas.tmt.Tmt
 import de.lukas.tmt.ui.Styles
+import de.lukas.tmt.ui.UI
 import de.lukas.tmt.util.log.Log.log
 import de.lukas.tmt.util.log.LogLevels
 import javafx.event.EventHandler
@@ -30,7 +31,7 @@ import kfoenix.jfxprogressbar
 import tornadofx.*
 
 class TaskView(private val task: Task) : Fragment() {
-    private val color = (task.deadline - Task.today).let {
+    private val color = (task.deadline - UI.today).let {
         when {
             it < 0 -> Styles.error
             it == 0L -> Styles.red
@@ -71,7 +72,7 @@ class TaskView(private val task: Task) : Fragment() {
                     }
                 }
             }
-            label("days left: ${task.deadline - Task.today}") {
+            label("days left: ${task.deadline - UI.today}") {
                 style {
                     textFill = color
                 }

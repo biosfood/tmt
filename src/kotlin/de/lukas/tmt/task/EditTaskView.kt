@@ -23,6 +23,8 @@ import com.jfoenix.controls.JFXTextArea
 import com.jfoenix.controls.JFXTextField
 import de.lukas.tmt.Tmt
 import de.lukas.tmt.ui.Styles
+import de.lukas.tmt.ui.UI
+import de.lukas.tmt.ui.util.DateConverter
 import javafx.event.EventHandler
 import kfoenix.*
 import tornadofx.*
@@ -49,9 +51,10 @@ class EditTaskView(private val task: Task) : Fragment("Edit task") {
                 }
                 field("deadline") {
                     date = jfxdatepicker()
-                    date.value = Date(task.deadline * Task.MILLISECONDS_PER_DAY).toInstant()
+                    date.value = Date(task.deadline * UI.MILLISECONDS_PER_DAY).toInstant()
                         .atZone(ZoneId.systemDefault()).toLocalDate()
                     date.defaultColor = Styles.functions
+                    date.converter = DateConverter(UI.SHORT_DATE_FORMAT)
                 }
                 pane {
                     prefHeight = 50.0

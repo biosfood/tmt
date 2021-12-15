@@ -83,10 +83,12 @@ class MainView : View("tmt") {
                             margin = Insets(10.0)
                         }
                     }
-                    val currentDate = Date(Task.today * Task.MILLISECONDS_PER_DAY).toLocalDate()
-                    val currentDay =
-                        SimpleLongProperty(currentDate.minusDays(currentDate.dayOfWeek.value.toLong() - 1).toEpochDay())
-                    val days = (currentDay..currentDay + 6).toList().toObservable()
+                    val currentDate = Date(UI.today * UI.MILLISECONDS_PER_DAY).toLocalDate()
+                    val initialDay = currentDate.minusDays(currentDate.dayOfWeek.value.toLong() - 1).toEpochDay()
+                    val currentDay = SimpleLongProperty(initialDay)
+                    val days = PropertyWrapper(currentDay) {
+                        (it as Long..it + 6).toList()
+                    }
                     hbox {
                         jfxbutton {
                             graphic = FontAwesomeIconView(FontAwesomeIcon.MINUS)
@@ -95,16 +97,36 @@ class MainView : View("tmt") {
                             onAction = EventHandler {
                                 log(LogLevels.INFO) { "moving calendar view" }
                                 currentDay -= 7
-                                for (day in days) {
-                                    day -= 7
+                            }
+                        }
+                        spacer()
+                        vbox {
+                            betterLabel {
+                                style {
+                                    fontSize = 1.5.em
+                                }
+                                this += PropertyWrapper(currentDay) {
+                                    UI.FULL_DATE_FORMAT.format(Date(it as Long * UI.MILLISECONDS_PER_DAY))
+                                }
+                                this += "  -  "
+                                this += PropertyWrapper(currentDay) {
+                                    UI.FULL_DATE_FORMAT.format(Date((it as Long + 6) * UI.MILLISECONDS_PER_DAY))
                                 }
                             }
-                        }
-                        betterLabel {
-                            this += PropertyWrapper(currentDay) {
-                                Date(it as Long * Task.MILLISECONDS_PER_DAY).toString()
+                            hbox {
+                                spacer()
+                                jfxbutton {
+                                    graphic = FontAwesomeIconView(FontAwesomeIcon.HOME)
+                                    (graphic as FontAwesomeIconView).size = "2em"
+                                    onAction = EventHandler {
+                                        log(LogLevels.INFO) { "moving calendar view" }
+                                        currentDay.value = initialDay
+                                    }
+                                }
+                                spacer()
                             }
                         }
+                        spacer()
                         jfxbutton {
                             graphic = FontAwesomeIconView(FontAwesomeIcon.PLUS)
                             (graphic as FontAwesomeIconView).size = "2em"
@@ -112,9 +134,6 @@ class MainView : View("tmt") {
                             onAction = EventHandler {
                                 log(LogLevels.INFO) { "moving calendar view" }
                                 currentDay += 7
-                                for (day in days) {
-                                    day += 7
-                                }
                             }
                         }
                     }

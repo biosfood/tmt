@@ -17,8 +17,8 @@
 
 package de.lukas.tmt.calendar
 
-import de.lukas.tmt.task.Task
 import de.lukas.tmt.ui.Styles
+import de.lukas.tmt.ui.UI
 import tornadofx.*
 import java.sql.Date
 
@@ -26,11 +26,11 @@ class DayView(private val day: Long) : Fragment() {
     override val root = vbox {
         addClass(Styles.root)
         addClass(Styles.card)
-        if (day == Task.today) {
+        if (day == UI.today) {
             style {
                 backgroundColor += Styles.secondBackground
             }
         }
-        label(Date(day * Task.MILLISECONDS_PER_DAY).toString())
+        label(UI.FULL_DATE_FORMAT.format(Date(day * UI.MILLISECONDS_PER_DAY)))
     }
 }

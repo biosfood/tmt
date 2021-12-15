@@ -17,28 +17,38 @@
 
 package de.lukas.tmt.ui.util
 
+import javafx.beans.Observable
 import javafx.beans.property.Property
 import javafx.collections.ObservableList
+import javafx.scene.Parent
 import javafx.scene.control.ScrollPane
 import tornadofx.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
-class BetterListView<T>(private val list: ObservableList<T>, private val view: KClass<out Fragment>) : View() {
+class BetterListView(list: Observable, private val view: KClass<out Fragment>) : View() {
+    override var root: Parent = assemble(listOf<Any>())
+
     init {
-        list.onChange {
-            root = assemble()
-        }
-        for (item in list) {
-            if (item is Property<*>) {
-                item.addListener(ChangeListener { _, _, _ -> root = assemble() })
+        when (list) {
+            is ObservableList<*> -> {
+                list.onChange { root = assemble(list) }
+                for (item in list) {
+                    if (item is Property<*>) {
+                        item.addListener(ChangeListener { _, _, _ -> root = assemble(list) })
+                    }
+                }
+                root = assemble(list)
             }
+            is Property<*> -> {
+                list.onChange { root = assemble(list.value as List<*>) }
+                root = assemble(list.value as List<*>)
+            }
+            else -> throw RuntimeException("type of $list cannot be displayed in a betterList!")
         }
     }
 
-    override var root = assemble()
-
-    private fun assemble(): ScrollPane {
+    private fun assemble(list: List<*>): ScrollPane {
         return scrollpane(true) {
             addClass("edge-to-edge")
             vbox {
