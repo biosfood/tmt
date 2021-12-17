@@ -17,16 +17,21 @@
 
 package de.lukas.tmt.calendar
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.lukas.tmt.Tmt
 import de.lukas.tmt.ui.Styles
 import de.lukas.tmt.ui.UI
 import de.lukas.tmt.ui.util.ListWrapper
 import de.lukas.tmt.ui.util.betterListView
+import de.lukas.tmt.util.log.Log
+import de.lukas.tmt.util.log.LogLevels
+import kfoenix.jfxbutton
 import tornadofx.*
 import java.sql.Date
 
 class DayView(private val day: Long) : Fragment() {
-    override val root = vbox {
+    override val root = hbox {
         addClass(Styles.root)
         addClass(Styles.card)
         if (day == UI.today) {
@@ -34,12 +39,27 @@ class DayView(private val day: Long) : Fragment() {
                 backgroundColor += Styles.secondBackground
             }
         }
-        label(UI.FULL_DATE_FORMAT.format(Date(day * UI.MILLISECONDS_PER_DAY)))
-        val assignments = ListWrapper(Tmt.config.assignments) {
-            it.filter { assignment ->
-                assignment.isOnDay(day)
+        vbox {
+            fitToParentWidth()
+            label(UI.FULL_DATE_FORMAT.format(Date(day * UI.MILLISECONDS_PER_DAY)))
+            val assignments = ListWrapper(Tmt.config.assignments) {
+                it.filter { assignment ->
+                    assignment.isOnDay(day)
+                }
+            }
+            betterListView(assignments, AssignmentView::class, false)
+        }
+        spacer()
+        jfxbutton {
+            graphic = FontAwesomeIconView(FontAwesomeIcon.PLUS)
+            (graphic as FontAwesomeIconView).size = "2em"
+            graphic.addClass(Styles.greenButton)
+            setOnAction {
+                Log.log(LogLevels.INFO) { "adding a new assignment" }
+                val assignment = Assignment(date = day)
+                Tmt.config.assignments += assignment
+                openInternalWindow(AssignmentEditor(assignment), owner = parent.scene.root)
             }
         }
-        betterListView(assignments, AssignmentView::class, false)
     }
 }

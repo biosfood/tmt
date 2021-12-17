@@ -24,8 +24,8 @@ import com.jfoenix.controls.JFXTextField
 import de.lukas.tmt.Tmt
 import de.lukas.tmt.ui.Styles
 import de.lukas.tmt.ui.UI
+import de.lukas.tmt.ui.update
 import de.lukas.tmt.ui.util.DateConverter
-import javafx.event.EventHandler
 import kfoenix.*
 import tornadofx.*
 import java.time.ZoneId
@@ -68,13 +68,13 @@ class EditTaskView(private val task: Task) : Fragment("Edit task") {
         }
         jfxbutton("save") {
             addClass(Styles.saveButton)
-            onAction = EventHandler {
+            style = "-fx-text-fill: black"
+            setOnAction {
                 task.title = titleField.text
                 task.description = descriptionField.text
                 task.deadline = date.value.toEpochDay()
                 task.progress = progress.value / 100
-                Tmt.config.tasks.remove(task)
-                Tmt.config.tasks.add(0, task)
+                Tmt.config.tasks.update()
                 Tmt.config.save()
                 close()
             }

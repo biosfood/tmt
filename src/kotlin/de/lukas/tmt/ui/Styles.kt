@@ -53,7 +53,6 @@ class Styles : Stylesheet() {
 
         saveButton {
             backgroundColor += green
-            textFill = background
             borderRadius += box(5.px)
         }
 

@@ -20,7 +20,7 @@ package de.lukas.tmt.calendar
 import de.lukas.tmt.ui.UI
 
 data class Assignment(
-    val name: String = "",
+    var title: String = "",
     val date: Long = UI.today,
 ) {
     fun isOnDay(day: Long): Boolean {

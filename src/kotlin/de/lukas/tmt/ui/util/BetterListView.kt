@@ -52,6 +52,8 @@ class BetterListView(list: Observable, private val view: KClass<out Fragment>, p
 
     private fun assemble(list: List<*>): Parent {
         val data = vbox {
+            fitToParentWidth()
+            addClass("edge-to-edge")
             for (item in list) {
                 if (item is Property<*>) {
                     this += view.primaryConstructor!!.call(item.value)
