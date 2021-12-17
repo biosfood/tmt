@@ -22,6 +22,7 @@ import de.lukas.tmt.ui.UI
 data class Assignment(
     var title: String = "",
     val date: Long = UI.today,
+    val type: AssignmentType = AssignmentType.REGULAR_ASSIGNMENT,
 ) {
     fun isOnDay(day: Long): Boolean {
         return date == day

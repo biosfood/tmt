@@ -17,7 +17,10 @@ class AssignmentView(private val assignment: Assignment) : Fragment() {
         style {
             backgroundColor += Color.TRANSPARENT
         }
-        label(assignment.title)
+        vbox {
+            label(assignment.title)
+            label(assignment.type.typeName) { style { textFill = Styles.functions } }
+        }
         spacer()
         jfxbutton {
             graphic = FontAwesomeIconView(FontAwesomeIcon.GEAR)

@@ -22,6 +22,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import de.lukas.tmt.calendar.Assignment
+import de.lukas.tmt.calendar.AssignmentType
 import de.lukas.tmt.task.Task
 import de.lukas.tmt.util.Util
 import de.lukas.tmt.util.log.Log.log
@@ -39,6 +40,16 @@ data class Config(
 
     fun save() {
         tasks.sort()
+        assignments.removeAll(assignments.filtered {
+            it.type == AssignmentType.TASK_DEADLINE
+        })
+        tasks.forEach {
+            assignments += Assignment(
+                title = "Deadline for task \"${it.title}\"",
+                type = AssignmentType.TASK_DEADLINE,
+                date = it.deadline
+            )
+        }
         Thread {
             mutableTasks = tasks
             mutableAssignments = assignments
