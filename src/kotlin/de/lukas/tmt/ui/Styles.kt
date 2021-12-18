@@ -69,6 +69,10 @@ class Styles : Stylesheet() {
             fill = error
         }
 
+        navigationButton {
+            fill = accent
+        }
+
         jfxTabPane {
             tabHeaderArea {
                 tabHeaderBackground {
@@ -101,6 +105,7 @@ class Styles : Stylesheet() {
         val heading by cssclass()
         val greenButton by cssclass()
         val redButton by cssclass()
+        val navigationButton by cssclass()
         val root by cssclass()
         val saveButton by cssclass()
 

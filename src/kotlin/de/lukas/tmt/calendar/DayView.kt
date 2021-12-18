@@ -47,9 +47,14 @@ class DayView(private val day: Long) : Fragment() {
                     assignment.isOnDay(day)
                 }
             }
+            pane {
+                prefHeight = 5.0
+            }
             betterListView(assignments, AssignmentView::class, false)
         }
-        spacer()
+        pane {
+            minWidth = 10.0
+        }
         jfxbutton {
             graphic = FontAwesomeIconView(FontAwesomeIcon.PLUS)
             (graphic as FontAwesomeIconView).size = "2em"

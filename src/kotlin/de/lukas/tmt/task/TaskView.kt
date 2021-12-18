@@ -86,7 +86,7 @@ class TaskView(private val task: Task) : Fragment() {
             (graphic as FontAwesomeIconView).size = "2em"
             onAction = EventHandler {
                 log(LogLevels.INFO) { "editing a task" }
-                openInternalWindow(EditTaskView(task), owner = parent.scene.root)
+                openInternalWindow(TaskEditor(task), owner = parent.scene.root)
             }
         }
         jfxbutton {

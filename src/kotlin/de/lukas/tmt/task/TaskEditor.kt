@@ -31,7 +31,7 @@ import tornadofx.*
 import java.time.ZoneId
 import java.util.*
 
-class EditTaskView(private val task: Task) : Fragment("Edit task") {
+class TaskEditor(private val task: Task) : Fragment("Edit task") {
     override val root = vbox {
         addClass(Styles.root)
 

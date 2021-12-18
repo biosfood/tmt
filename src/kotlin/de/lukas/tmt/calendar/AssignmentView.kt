@@ -3,6 +3,7 @@ package de.lukas.tmt.calendar
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.lukas.tmt.Tmt
+import de.lukas.tmt.task.TaskEditor
 import de.lukas.tmt.ui.Styles
 import de.lukas.tmt.util.log.Log
 import de.lukas.tmt.util.log.LogLevels
@@ -27,7 +28,11 @@ class AssignmentView(private val assignment: Assignment) : Fragment() {
             (graphic as FontAwesomeIconView).size = "2em"
             setOnAction {
                 Log.log(LogLevels.INFO) { "editing an assignment" }
-                openInternalWindow(AssignmentEditor(assignment), owner = parent.scene.root)
+                if (assignment.type == AssignmentType.TASK_DEADLINE) {
+                    openInternalWindow(TaskEditor(assignment.task!!), owner = parent.scene.root)
+                } else {
+                    openInternalWindow(AssignmentEditor(assignment), owner = parent.scene.root)
+                }
             }
         }
         jfxbutton {
@@ -36,7 +41,12 @@ class AssignmentView(private val assignment: Assignment) : Fragment() {
             graphic.addClass(Styles.redButton)
             setOnAction {
                 Log.log(LogLevels.INFO) { "removing an assignment" }
-                Tmt.config.assignments -= assignment
+                if (assignment.type == AssignmentType.TASK_DEADLINE) {
+                    Tmt.config.tasks -= assignment.task
+                } else {
+                    Tmt.config.assignments -= assignment
+                }
+                Tmt.config.save()
             }
         }
     }

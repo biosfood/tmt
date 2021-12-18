@@ -17,12 +17,14 @@
 
 package de.lukas.tmt.calendar
 
+import de.lukas.tmt.task.Task
 import de.lukas.tmt.ui.UI
 
 data class Assignment(
     var title: String = "",
     val date: Long = UI.today,
     val type: AssignmentType = AssignmentType.REGULAR_ASSIGNMENT,
+    val task: Task? = null
 ) {
     fun isOnDay(day: Long): Boolean {
         return date == day

@@ -43,16 +43,17 @@ data class Config(
         assignments.removeAll(assignments.filtered {
             it.type == AssignmentType.TASK_DEADLINE
         })
+        mutableAssignments = assignments.toMutableList()
         tasks.forEach {
             assignments += Assignment(
                 title = "Deadline for task \"${it.title}\"",
                 type = AssignmentType.TASK_DEADLINE,
-                date = it.deadline
+                date = it.deadline,
+                task = it,
             )
         }
         Thread {
             mutableTasks = tasks
-            mutableAssignments = assignments
             val file = File(CONFIG_FILE_PATH)
             log(LogLevels.VERBOSE) { "saving configuration" }
             file.writeText(MOSHI.toJson(this), Charsets.UTF_8)
