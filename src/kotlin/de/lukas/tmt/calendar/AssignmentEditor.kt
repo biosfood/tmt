@@ -7,8 +7,8 @@ import com.jfoenix.controls.JFXTimePicker
 import de.lukas.tmt.Tmt
 import de.lukas.tmt.ui.Styles
 import de.lukas.tmt.ui.UI
-import de.lukas.tmt.ui.update
 import de.lukas.tmt.ui.util.DateConverter
+import de.lukas.tmt.util.update
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.layout.HBox

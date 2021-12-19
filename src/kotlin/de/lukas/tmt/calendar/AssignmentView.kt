@@ -21,7 +21,14 @@ class AssignmentView(private val assignment: Assignment) : Fragment() {
             backgroundColor += Color.TRANSPARENT
         }
         vbox {
-            label(assignment.title)
+            label(assignment.title) {
+                style {
+                    fontSize = 1.5.em
+                }
+            }
+            if (assignment.description.isNotEmpty()) {
+                label(assignment.description)
+            }
             label(assignment.type.typeName) { style { textFill = Styles.functions } }
         }
         spacer()
@@ -43,7 +50,6 @@ class AssignmentView(private val assignment: Assignment) : Fragment() {
                         textFill = Styles.green
                     }
                 }
-                spacer()
                 label(LocalTime.ofSecondOfDay(assignment.end.toLong()).toString()) {
                     style {
                         textFill = Styles.red
@@ -55,31 +61,37 @@ class AssignmentView(private val assignment: Assignment) : Fragment() {
         pane {
             minWidth = 10.0
         }
-        jfxbutton {
-            graphic = FontAwesomeIconView(FontAwesomeIcon.GEAR)
-            (graphic as FontAwesomeIconView).size = "2em"
-            setOnAction {
-                Log.log(LogLevels.INFO) { "editing an assignment" }
-                if (assignment.type == AssignmentType.TASK_DEADLINE) {
-                    openDialogue(TaskEditor(assignment.task!!), parent)
-                } else {
-                    openDialogue(AssignmentEditor(assignment), parent)
+        vbox {
+            spacer()
+            hbox {
+                jfxbutton {
+                    graphic = FontAwesomeIconView(FontAwesomeIcon.GEAR)
+                    (graphic as FontAwesomeIconView).size = "2em"
+                    setOnAction {
+                        Log.log(LogLevels.INFO) { "editing an assignment" }
+                        if (assignment.type == AssignmentType.TASK_DEADLINE) {
+                            openDialogue(TaskEditor(assignment.task!!), parent)
+                        } else {
+                            openDialogue(AssignmentEditor(assignment), parent)
+                        }
+                    }
+                }
+                jfxbutton {
+                    graphic = FontAwesomeIconView(FontAwesomeIcon.TRASH)
+                    (graphic as FontAwesomeIconView).size = "2em"
+                    graphic.addClass(Styles.redButton)
+                    setOnAction {
+                        Log.log(LogLevels.INFO) { "removing an assignment" }
+                        if (assignment.type == AssignmentType.TASK_DEADLINE) {
+                            Tmt.config.tasks -= assignment.task
+                        } else {
+                            Tmt.config.assignments -= assignment
+                        }
+                        Tmt.config.save()
+                    }
                 }
             }
-        }
-        jfxbutton {
-            graphic = FontAwesomeIconView(FontAwesomeIcon.TRASH)
-            (graphic as FontAwesomeIconView).size = "2em"
-            graphic.addClass(Styles.redButton)
-            setOnAction {
-                Log.log(LogLevels.INFO) { "removing an assignment" }
-                if (assignment.type == AssignmentType.TASK_DEADLINE) {
-                    Tmt.config.tasks -= assignment.task
-                } else {
-                    Tmt.config.assignments -= assignment
-                }
-                Tmt.config.save()
-            }
+            spacer()
         }
     }
 }

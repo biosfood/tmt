@@ -17,10 +17,12 @@
 
 package de.lukas.tmt.ui.util
 
+import de.lukas.tmt.util.getPrivateProperty
 import javafx.beans.Observable
 import javafx.beans.property.Property
 import javafx.collections.ObservableList
 import javafx.event.EventTarget
+import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.paint.Color
 import tornadofx.*
@@ -31,22 +33,31 @@ class BetterListView(list: Observable, private val view: KClass<out Fragment>, p
     View() {
     override var root: Parent = assemble(listOf<Any>())
 
+    private lateinit var theParent: Parent
+
     init {
         when (list) {
             is ObservableList<*> -> {
-                list.onChange { root = assemble(list) }
-                for (item in list) {
-                    if (item is Property<*>) {
-                        item.addListener(ChangeListener { _, _, _ -> root = assemble(list) })
+                list.onChange {
+                    root = assemble(list)
+                    clearParent()
+                    if (list.isNotEmpty()) {
+                        theParent += this
                     }
                 }
                 root = assemble(list)
             }
             is Property<*> -> {
-                list.onChange { root = assemble(list.value as List<*>) }
+                list.onChange {
+                    root = assemble(list.value as List<*>)
+                    clearParent()
+                    if ((list.value as List<*>).isNotEmpty()) {
+                        theParent += this
+                    }
+                }
                 root = assemble(list.value as List<*>)
             }
-            else -> throw RuntimeException("type of $list cannot be displayed in a BetterListView!")
+            else -> throw IllegalArgumentException("type of $list cannot be displayed in a BetterListView!")
         }
     }
 
@@ -62,10 +73,15 @@ class BetterListView(list: Observable, private val view: KClass<out Fragment>, p
                 }
             }
         }
-        if (!scrollable) {
-            return data
-        }
         return scrollpane(true) {
+            parentProperty().onChange {
+                parent?.let {
+                    theParent = parent
+                    if (list.isEmpty()) {
+                        clearParent()
+                    }
+                }
+            }
             style {
                 baseColor = Color.TRANSPARENT
                 backgroundColor += Color.TRANSPARENT
@@ -75,8 +91,12 @@ class BetterListView(list: Observable, private val view: KClass<out Fragment>, p
             this += data
         }
     }
+
+    private fun clearParent() = theParent.getPrivateProperty<Parent, MutableList<Node>>("children")!!.clear()
 }
 
 fun EventTarget.betterListView(list: Observable, view: KClass<out Fragment>, scrollable: Boolean = true) {
-    this += BetterListView(list, view, true)
+    vbox {
+        this += BetterListView(list, view, scrollable)
+    }
 }

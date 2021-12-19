@@ -22,7 +22,6 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import de.lukas.tmt.calendar.Assignment
-import de.lukas.tmt.calendar.AssignmentType
 import de.lukas.tmt.task.Task
 import de.lukas.tmt.util.Util
 import de.lukas.tmt.util.log.Log.log
@@ -32,30 +31,20 @@ import java.io.File
 
 data class Config(
     @Json(name = "startMaximized") val startMaximized: Boolean = true,
-    @Json(name = "tasks") var mutableTasks: MutableList<Task> = mutableListOf(),
-    @Json(name = "assignments") var mutableAssignments: MutableList<Assignment> = mutableListOf(),
+    @Json(name = "tasks") var moshiTasks: MutableList<Task> = mutableListOf(),
+    @Json(name = "assignments") var moshiAssignments: MutableList<Assignment> = mutableListOf(),
 ) {
-    val tasks = mutableTasks.toObservable()
-    val assignments = mutableAssignments.toObservable()
+    val tasks = moshiTasks.toObservable()
+    val assignments = moshiAssignments.toObservable()
+
+    init {
+        moshiTasks = tasks
+        moshiAssignments = assignments
+    }
 
     fun save() {
         tasks.sort()
-        assignments.removeAll(assignments.filtered {
-            it.type == AssignmentType.TASK_DEADLINE
-        })
-        mutableAssignments = assignments.toMutableList()
-        tasks.forEach {
-            assignments += Assignment(
-                title = "Deadline for task \"${it.title}\"",
-                description = it.description,
-                type = AssignmentType.TASK_DEADLINE,
-                date = it.deadline,
-                task = it,
-                isFullDay = true,
-            )
-        }
         Thread {
-            mutableTasks = tasks
             val file = File(CONFIG_FILE_PATH)
             log(LogLevels.VERBOSE) { "saving configuration" }
             file.writeText(MOSHI.toJson(this), Charsets.UTF_8)

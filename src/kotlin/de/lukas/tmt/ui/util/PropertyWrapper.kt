@@ -78,7 +78,6 @@ class PropertyWrapper<U, T>(property: Property<U>, callback: (U) -> T) : Propert
     }
 
     override fun addListener(p0: InvalidationListener?) {
-        TODO("Not yet implemented")
     }
 
     override fun removeListener(p0: InvalidationListener?) {

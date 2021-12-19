@@ -24,9 +24,9 @@ import de.lukas.tmt.calendar.DayView
 import de.lukas.tmt.task.Task
 import de.lukas.tmt.task.TaskEditor
 import de.lukas.tmt.task.TaskView
-import de.lukas.tmt.ui.util.BetterListView
 import de.lukas.tmt.ui.util.PropertyWrapper
 import de.lukas.tmt.ui.util.betterLabel
+import de.lukas.tmt.ui.util.betterListView
 import de.lukas.tmt.util.log.Log.log
 import de.lukas.tmt.util.log.LogLevels
 import javafx.beans.property.SimpleLongProperty
@@ -71,7 +71,7 @@ class MainView : View("tmt") {
                             }
                         }
                     }
-                    this += BetterListView(Tmt.config.tasks, TaskView::class)
+                    betterListView(Tmt.config.tasks, TaskView::class)
                 }
             }
             tab("calendar") {
@@ -137,7 +137,7 @@ class MainView : View("tmt") {
                             }
                         }
                     }
-                    this += BetterListView(days, DayView::class)
+                    betterListView(days, DayView::class)
                 }
             }
         }

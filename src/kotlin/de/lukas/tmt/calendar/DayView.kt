@@ -25,6 +25,7 @@ import de.lukas.tmt.ui.UI
 import de.lukas.tmt.ui.openDialogue
 import de.lukas.tmt.ui.util.ListWrapper
 import de.lukas.tmt.ui.util.betterListView
+import de.lukas.tmt.util.forNew
 import de.lukas.tmt.util.log.Log
 import de.lukas.tmt.util.log.LogLevels
 import kfoenix.jfxbutton
@@ -43,15 +44,30 @@ class DayView(private val day: Long) : Fragment() {
         vbox {
             fitToParentWidth()
             label(UI.FULL_DATE_FORMAT.format(Date(day * UI.MILLISECONDS_PER_DAY)))
-            val assignments = ListWrapper(Tmt.config.assignments) {
-                it.filter { assignment ->
-                    assignment.isOnDay(day)
-                }
-            }
             pane {
                 prefHeight = 5.0
             }
-            betterListView(assignments, AssignmentView::class, false)
+            val assignments = ListWrapper(Tmt.config.assignments) {
+                it.filter { assignment ->
+                    assignment.isOnDay(day)
+                }.sorted()
+            }
+            val tasks = ListWrapper(Tmt.config.tasks) {
+                it.filter { task ->
+                    task.deadline == day
+                }.forNew { task ->
+                    Assignment(
+                        title = "Deadline for task \"${task.title}\"",
+                        description = task.description,
+                        type = AssignmentType.TASK_DEADLINE,
+                        date = task.deadline,
+                        task = task,
+                        isFullDay = true,
+                    )
+                }
+            }
+            betterListView(tasks, AssignmentView::class)
+            betterListView(assignments, AssignmentView::class)
         }
         pane {
             minWidth = 10.0

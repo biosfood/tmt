@@ -24,14 +24,27 @@ import java.time.LocalTime
 data class Assignment(
     var title: String = "",
     var description: String = "",
-    var start: Int = LocalTime.MIN.toSecondOfDay(),
-    var end: Int = LocalTime.MAX.toSecondOfDay(),
+    var start: Int = LocalTime.of(0, 0).toSecondOfDay(),
+    var end: Int = LocalTime.of(23, 0).toSecondOfDay(),
     var date: Long = UI.today,
     var type: AssignmentType = AssignmentType.REGULAR_ASSIGNMENT,
     var isFullDay: Boolean = false,
     val task: Task? = null
-) {
+) : Comparable<Assignment> {
     fun isOnDay(day: Long): Boolean {
         return date == day
+    }
+
+    override fun compareTo(other: Assignment): Int {
+        if (isFullDay) {
+            if (other.isFullDay) {
+                return 0
+            }
+            return 1
+        }
+        if (other.isFullDay) {
+            return -1
+        }
+        return start - other.start
     }
 }

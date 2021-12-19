@@ -17,12 +17,9 @@
 
 package de.lukas.tmt.ui
 
-import com.sun.javafx.collections.NonIterableChange
 import de.lukas.tmt.Tmt
 import de.lukas.tmt.util.log.Log.log
 import de.lukas.tmt.util.log.LogLevels
-import javafx.collections.ObservableList
-import javafx.collections.ObservableListBase
 import javafx.scene.Parent
 import javafx.stage.Stage
 import tornadofx.App
@@ -30,8 +27,6 @@ import tornadofx.Fragment
 import tornadofx.UIComponent
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.reflect.full.declaredMemberFunctions
-import kotlin.reflect.jvm.isAccessible
 import kotlin.system.exitProcess
 
 class UI : App(MainView::class, Styles::class) {
@@ -55,21 +50,6 @@ class UI : App(MainView::class, Styles::class) {
         val SHORT_DATE_FORMAT = SimpleDateFormat("dd.MM.yy")
         val FULL_DATE_FORMAT = SimpleDateFormat("EEEE, dd.MM.yy")
     }
-}
-
-inline fun <reified T> T.callPrivateFunc(name: String, vararg args: Any?): Any? =
-    T::class
-        .declaredMemberFunctions
-        .firstOrNull { it.name == name }
-        ?.apply { isAccessible = true }
-        ?.call(this, *args) ?: throw NoSuchMethodError("unknown method $name")
-
-fun ObservableList<*>.update() {
-    // needs to be implemented into the original version at some point
-    (this as ObservableListBase).callPrivateFunc(
-        "fireChange",
-        NonIterableChange.SimpleUpdateChange(0, 0, this)
-    )
 }
 
 fun UIComponent.openDialogue(view: Fragment, parent: Parent) {
