@@ -22,6 +22,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.lukas.tmt.Tmt
 import de.lukas.tmt.ui.Styles
 import de.lukas.tmt.ui.UI
+import de.lukas.tmt.ui.openDialogue
 import de.lukas.tmt.ui.util.ListWrapper
 import de.lukas.tmt.ui.util.betterListView
 import de.lukas.tmt.util.log.Log
@@ -63,7 +64,7 @@ class DayView(private val day: Long) : Fragment() {
                 Log.log(LogLevels.INFO) { "adding a new assignment" }
                 val assignment = Assignment(date = day)
                 Tmt.config.assignments += assignment
-                openInternalWindow(AssignmentEditor(assignment), owner = parent.scene.root)
+                openDialogue(AssignmentEditor(assignment), parent)
             }
         }
     }

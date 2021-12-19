@@ -67,7 +67,7 @@ class MainView : View("tmt") {
                                 log(LogLevels.INFO) { "adding a new task" }
                                 val task = Task()
                                 Tmt.config.tasks += task
-                                openInternalWindow(TaskEditor(task), owner = parent.scene.root)
+                                openDialogue(TaskEditor(task), parent)
                             }
                         }
                     }

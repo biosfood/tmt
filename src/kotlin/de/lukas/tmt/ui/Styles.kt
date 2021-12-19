@@ -44,6 +44,11 @@ class Styles : Stylesheet() {
             +main
         }
 
+        internalWindow {
+            +main
+            backgroundColor += background
+        }
+
         card {
             +main
             borderColor += box(foreground)
@@ -98,6 +103,14 @@ class Styles : Stylesheet() {
         tabContentArea {
             padding = box(10.px)
         }
+
+        comboBox {
+            listView {
+                listCell {
+                    backgroundColor += background
+                }
+            }
+        }
     }
 
     companion object {
@@ -108,9 +121,14 @@ class Styles : Stylesheet() {
         val navigationButton by cssclass()
         val root by cssclass()
         val saveButton by cssclass()
+        val internalWindow by cssclass()
 
         val jfxTabPane by cssclass("jfx-tab-pane")
         val tabSelectedLine by cssclass("tab-selected-line")
+        val hbox by cssclass("hbox")
+        val comboBox by cssclass("combo-box")
+        val listView by cssclass("list-view")
+        val listCell by cssclass("list-cell")
         val cellFormat by cssclass()
 
         // material oceanic

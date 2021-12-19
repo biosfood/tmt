@@ -47,9 +47,11 @@ data class Config(
         tasks.forEach {
             assignments += Assignment(
                 title = "Deadline for task \"${it.title}\"",
+                description = it.description,
                 type = AssignmentType.TASK_DEADLINE,
                 date = it.deadline,
                 task = it,
+                isFullDay = true,
             )
         }
         Thread {

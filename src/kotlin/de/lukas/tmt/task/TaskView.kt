@@ -22,6 +22,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.lukas.tmt.Tmt
 import de.lukas.tmt.ui.Styles
 import de.lukas.tmt.ui.UI
+import de.lukas.tmt.ui.openDialogue
 import de.lukas.tmt.util.log.Log.log
 import de.lukas.tmt.util.log.LogLevels
 import javafx.event.EventHandler
@@ -86,7 +87,7 @@ class TaskView(private val task: Task) : Fragment() {
             (graphic as FontAwesomeIconView).size = "2em"
             onAction = EventHandler {
                 log(LogLevels.INFO) { "editing a task" }
-                openInternalWindow(TaskEditor(task), owner = parent.scene.root)
+                openDialogue(TaskEditor(task), parent)
             }
         }
         jfxbutton {

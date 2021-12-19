@@ -23,8 +23,11 @@ import de.lukas.tmt.util.log.Log.log
 import de.lukas.tmt.util.log.LogLevels
 import javafx.collections.ObservableList
 import javafx.collections.ObservableListBase
+import javafx.scene.Parent
 import javafx.stage.Stage
 import tornadofx.App
+import tornadofx.Fragment
+import tornadofx.UIComponent
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.reflect.full.declaredMemberFunctions
@@ -67,4 +70,8 @@ fun ObservableList<*>.update() {
         "fireChange",
         NonIterableChange.SimpleUpdateChange(0, 0, this)
     )
+}
+
+fun UIComponent.openDialogue(view: Fragment, parent: Parent) {
+    this.openInternalWindow(view, owner = parent.scene.root, closeButton = false, escapeClosesWindow = false)
 }

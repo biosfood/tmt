@@ -26,6 +26,7 @@ import de.lukas.tmt.ui.Styles
 import de.lukas.tmt.ui.UI
 import de.lukas.tmt.ui.update
 import de.lukas.tmt.ui.util.DateConverter
+import javafx.scene.layout.HBox
 import kfoenix.*
 import tornadofx.*
 import java.time.ZoneId
@@ -33,6 +34,10 @@ import java.util.*
 
 class TaskEditor(private val task: Task) : Fragment("Edit task") {
     override val root = vbox {
+        parentProperty().onChange {
+            parent.addClass(Styles.internalWindow)
+            parent.parent.childrenUnmodifiable.filterIsInstance<HBox>().addClass(Styles.internalWindow)
+        }
         addClass(Styles.root)
 
         lateinit var titleField: JFXTextField
@@ -66,17 +71,20 @@ class TaskEditor(private val task: Task) : Fragment("Edit task") {
                 }
             }
         }
-        jfxbutton("save") {
-            addClass(Styles.saveButton)
-            style = "-fx-text-fill: black"
-            setOnAction {
-                task.title = titleField.text
-                task.description = descriptionField.text
-                task.deadline = date.value.toEpochDay()
-                task.progress = progress.value / 100
-                Tmt.config.tasks.update()
-                Tmt.config.save()
-                close()
+        hbox {
+            spacer()
+            jfxbutton("save") {
+                addClass(Styles.saveButton)
+                style = "-fx-text-fill: black"
+                setOnAction {
+                    task.title = titleField.text
+                    task.description = descriptionField.text
+                    task.deadline = date.value.toEpochDay()
+                    task.progress = progress.value / 100
+                    Tmt.config.tasks.update()
+                    Tmt.config.save()
+                    close()
+                }
             }
         }
     }

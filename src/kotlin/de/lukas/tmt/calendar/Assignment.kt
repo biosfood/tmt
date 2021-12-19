@@ -19,11 +19,16 @@ package de.lukas.tmt.calendar
 
 import de.lukas.tmt.task.Task
 import de.lukas.tmt.ui.UI
+import java.time.LocalTime
 
 data class Assignment(
     var title: String = "",
-    val date: Long = UI.today,
-    val type: AssignmentType = AssignmentType.REGULAR_ASSIGNMENT,
+    var description: String = "",
+    var start: Int = LocalTime.MIN.toSecondOfDay(),
+    var end: Int = LocalTime.MAX.toSecondOfDay(),
+    var date: Long = UI.today,
+    var type: AssignmentType = AssignmentType.REGULAR_ASSIGNMENT,
+    var isFullDay: Boolean = false,
     val task: Task? = null
 ) {
     fun isOnDay(day: Long): Boolean {
