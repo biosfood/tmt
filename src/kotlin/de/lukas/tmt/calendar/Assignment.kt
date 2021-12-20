@@ -19,6 +19,7 @@ package de.lukas.tmt.calendar
 
 import de.lukas.tmt.task.Task
 import de.lukas.tmt.ui.UI
+import java.sql.Date
 import java.time.LocalTime
 
 data class Assignment(
@@ -32,7 +33,27 @@ data class Assignment(
     val task: Task? = null
 ) : Comparable<Assignment> {
     fun isOnDay(day: Long): Boolean {
-        return date == day
+        if (date == day || type == AssignmentType.DAILY_ASSIGNMENT && day > date) {
+            return true
+        }
+        if (day < date || type == AssignmentType.REGULAR_ASSIGNMENT || type == AssignmentType.TASK_DEADLINE) {
+            return false
+        }
+        return when (type) {
+            AssignmentType.DAILY_ASSIGNMENT -> true
+            AssignmentType.WEEKLY_ASSIGNMENT ->
+                Date(day * UI.MILLISECONDS_PER_DAY).toLocalDate().dayOfWeek ==
+                        Date(date * UI.MILLISECONDS_PER_DAY).toLocalDate().dayOfWeek
+            AssignmentType.MONTHLY_ASSIGNMENT ->
+                Date(day * UI.MILLISECONDS_PER_DAY).toLocalDate().dayOfMonth ==
+                        Date(date * UI.MILLISECONDS_PER_DAY).toLocalDate().dayOfMonth
+            AssignmentType.YEARLY_ASSIGNMENT ->
+                Date(day * UI.MILLISECONDS_PER_DAY).toLocalDate().dayOfYear ==
+                        Date(date * UI.MILLISECONDS_PER_DAY).toLocalDate().dayOfYear
+            else -> {
+                throw RuntimeException()
+            }
+        }
     }
 
     override fun compareTo(other: Assignment): Int {

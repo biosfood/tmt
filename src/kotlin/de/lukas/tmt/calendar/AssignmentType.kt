@@ -5,7 +5,8 @@ enum class AssignmentType(val typeName: String) {
     REGULAR_ASSIGNMENT("regular"),
     DAILY_ASSIGNMENT("daily"),
     WEEKLY_ASSIGNMENT("weekly"),
-    MONTHLY_ASSIGNMENT("yearly"),
+    MONTHLY_ASSIGNMENT("monthly"),
+    YEARLY_ASSIGNMENT("yearly"),
     ;
 
     override fun toString(): String = typeName

@@ -81,7 +81,6 @@ class AssignmentEditor(private val assignment: Assignment) : Fragment("Edit assi
                         spacer()
                         jfxcombobox(typeProperty, AssignmentType.CHOOSABLE_VALUES) {
                             focusColor = Styles.functions
-                            value = AssignmentType.REGULAR_ASSIGNMENT
                         }
                     }
                 }
