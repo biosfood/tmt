@@ -61,8 +61,7 @@ data class Config(
             log(LogLevels.VERBOSE) { "reading configuration" }
             val file = File(CONFIG_FILE_PATH)
             val config = if (file.exists()) {
-                val data = file.readLines()
-                MOSHI.fromJson(data.joinToString(""))!!
+                MOSHI.fromJson(file.readLines().joinToString(""))!!
             } else {
                 log(LogLevels.INFO) { "config file doesn't exist, creating a new one..." }
                 File(Util.TMT_HOME).mkdirs()

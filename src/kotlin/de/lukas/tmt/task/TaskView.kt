@@ -18,17 +18,17 @@
 package de.lukas.tmt.task
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.lukas.tmt.Tmt
 import de.lukas.tmt.ui.Styles
 import de.lukas.tmt.ui.UI
 import de.lukas.tmt.ui.openDialogue
+import de.lukas.tmt.ui.util.IconView
+import de.lukas.tmt.ui.util.betterProgressBar
 import de.lukas.tmt.util.log.Log.log
 import de.lukas.tmt.util.log.LogLevels
 import javafx.event.EventHandler
 import javafx.scene.layout.Priority
 import kfoenix.jfxbutton
-import kfoenix.jfxprogressbar
 import tornadofx.*
 
 class TaskView(private val task: Task) : Fragment() {
@@ -64,15 +64,9 @@ class TaskView(private val task: Task) : Fragment() {
                 label(task.description)
             }
             hbox {
-                label("progress:   ")
-                vbox {
-                    pane {
-                        prefHeight = 8.0
-                    }
-                    jfxprogressbar {
-                        progress = task.progress
-                    }
-                }
+                label("progress:")
+                spacer()
+                betterProgressBar(task.progress)
             }
             label("days left: ${task.deadline - UI.today}") {
                 style {
@@ -84,17 +78,14 @@ class TaskView(private val task: Task) : Fragment() {
             hgrow = Priority.ALWAYS
         }
         jfxbutton {
-            graphic = FontAwesomeIconView(FontAwesomeIcon.GEAR)
-            (graphic as FontAwesomeIconView).size = "2em"
+            graphic = IconView(FontAwesomeIcon.GEAR, Styles.foreground, 2)
             onAction = EventHandler {
                 log(LogLevels.INFO) { "editing a task" }
                 openDialogue(TaskEditor(task), parent)
             }
         }
         jfxbutton {
-            graphic = FontAwesomeIconView(FontAwesomeIcon.TRASH)
-            (graphic as FontAwesomeIconView).size = "2em"
-            graphic.addClass(Styles.redButton)
+            graphic = IconView(FontAwesomeIcon.TRASH, Styles.error, 2)
             onAction = EventHandler {
                 log(LogLevels.INFO) { "removing a task" }
                 Tmt.config.tasks.remove(task)

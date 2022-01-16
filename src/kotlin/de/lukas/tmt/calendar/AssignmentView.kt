@@ -1,11 +1,11 @@
 package de.lukas.tmt.calendar
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.lukas.tmt.Tmt
 import de.lukas.tmt.task.TaskEditor
 import de.lukas.tmt.ui.Styles
 import de.lukas.tmt.ui.openDialogue
+import de.lukas.tmt.ui.util.IconView
 import de.lukas.tmt.util.log.Log
 import de.lukas.tmt.util.log.LogLevels
 import javafx.scene.paint.Color
@@ -65,8 +65,7 @@ class AssignmentView(private val assignment: Assignment) : Fragment() {
             spacer()
             hbox {
                 jfxbutton {
-                    graphic = FontAwesomeIconView(FontAwesomeIcon.GEAR)
-                    (graphic as FontAwesomeIconView).size = "2em"
+                    graphic = IconView(FontAwesomeIcon.GEAR, Styles.foreground, 2)
                     setOnAction {
                         Log.log(LogLevels.INFO) { "editing an assignment" }
                         if (assignment.type == AssignmentType.TASK_DEADLINE) {
@@ -77,9 +76,7 @@ class AssignmentView(private val assignment: Assignment) : Fragment() {
                     }
                 }
                 jfxbutton {
-                    graphic = FontAwesomeIconView(FontAwesomeIcon.TRASH)
-                    (graphic as FontAwesomeIconView).size = "2em"
-                    graphic.addClass(Styles.redButton)
+                    graphic = IconView(FontAwesomeIcon.TRASH, Styles.error, 2)
                     setOnAction {
                         Log.log(LogLevels.INFO) { "removing an assignment" }
                         if (assignment.type == AssignmentType.TASK_DEADLINE) {

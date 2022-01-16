@@ -64,7 +64,7 @@ class AssignmentEditor(private val assignment: Assignment) : Fragment("Edit assi
                         spacer()
                         startTime = JFXTimePicker(LocalTime.ofSecondOfDay(assignment.start.toLong()))
                         startTime.defaultColor = Styles.functions
-                        startTime.setIs24HourView(true)
+                        startTime.is24HourView = true
                         this += startTime
                     }
                 }
@@ -73,6 +73,7 @@ class AssignmentEditor(private val assignment: Assignment) : Fragment("Edit assi
                         spacer()
                         endTime = JFXTimePicker(LocalTime.ofSecondOfDay(assignment.end.toLong()))
                         endTime.defaultColor = Styles.functions
+                        endTime.is24HourView = true
                         this += endTime
                     }
                 }

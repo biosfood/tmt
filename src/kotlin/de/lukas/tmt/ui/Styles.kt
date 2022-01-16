@@ -66,18 +66,6 @@ class Styles : Stylesheet() {
             alignment = Pos.BASELINE_CENTER
         }
 
-        greenButton {
-            fill = strings
-        }
-
-        redButton {
-            fill = error
-        }
-
-        navigationButton {
-            fill = accent
-        }
-
         jfxTabPane {
             tabHeaderArea {
                 tabHeaderBackground {
@@ -116,20 +104,15 @@ class Styles : Stylesheet() {
     companion object {
         val card by cssclass()
         val heading by cssclass()
-        val greenButton by cssclass()
-        val redButton by cssclass()
-        val navigationButton by cssclass()
         val root by cssclass()
         val saveButton by cssclass()
         val internalWindow by cssclass()
 
         val jfxTabPane by cssclass("jfx-tab-pane")
         val tabSelectedLine by cssclass("tab-selected-line")
-        val hbox by cssclass("hbox")
         val comboBox by cssclass("combo-box")
         val listView by cssclass("list-view")
         val listCell by cssclass("list-cell")
-        val cellFormat by cssclass()
 
         // material oceanic
         val background = c("#263238")

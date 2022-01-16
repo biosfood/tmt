@@ -18,14 +18,14 @@
 package de.lukas.tmt.calendar
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.lukas.tmt.Tmt
+import de.lukas.tmt.task.TaskView
 import de.lukas.tmt.ui.Styles
 import de.lukas.tmt.ui.UI
 import de.lukas.tmt.ui.openDialogue
+import de.lukas.tmt.ui.util.IconView
 import de.lukas.tmt.ui.util.ListWrapper
 import de.lukas.tmt.ui.util.betterListView
-import de.lukas.tmt.util.forNew
 import de.lukas.tmt.util.log.Log
 import de.lukas.tmt.util.log.LogLevels
 import kfoenix.jfxbutton
@@ -55,27 +55,16 @@ class DayView(private val day: Long) : Fragment() {
             val tasks = ListWrapper(Tmt.config.tasks) {
                 it.filter { task ->
                     task.deadline == day
-                }.forNew { task ->
-                    Assignment(
-                        title = "Deadline for task \"${task.title}\"",
-                        description = task.description,
-                        type = AssignmentType.TASK_DEADLINE,
-                        date = task.deadline,
-                        task = task,
-                        isFullDay = true,
-                    )
                 }
             }
-            betterListView(tasks, AssignmentView::class)
+            betterListView(tasks, TaskView::class)
             betterListView(assignments, AssignmentView::class)
         }
         pane {
             minWidth = 10.0
         }
         jfxbutton {
-            graphic = FontAwesomeIconView(FontAwesomeIcon.PLUS)
-            (graphic as FontAwesomeIconView).size = "2em"
-            graphic.addClass(Styles.greenButton)
+            graphic = IconView(FontAwesomeIcon.PLUS, Styles.strings, 2)
             setOnAction {
                 Log.log(LogLevels.INFO) { "adding a new assignment" }
                 val assignment = Assignment(date = day)

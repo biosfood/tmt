@@ -18,12 +18,12 @@
 package de.lukas.tmt.ui
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.lukas.tmt.Tmt
 import de.lukas.tmt.calendar.DayView
 import de.lukas.tmt.task.Task
 import de.lukas.tmt.task.TaskEditor
 import de.lukas.tmt.task.TaskView
+import de.lukas.tmt.ui.util.IconView
 import de.lukas.tmt.ui.util.PropertyWrapper
 import de.lukas.tmt.ui.util.betterLabel
 import de.lukas.tmt.ui.util.betterListView
@@ -59,10 +59,7 @@ class MainView : View("tmt") {
                             hgrow = Priority.ALWAYS
                         }
                         jfxbutton {
-                            addClass(Styles.greenButton)
-                            graphic = FontAwesomeIconView(FontAwesomeIcon.PLUS)
-                            (graphic as FontAwesomeIconView).size = "4em"
-                            graphic.addClass(Styles.greenButton)
+                            graphic = IconView(FontAwesomeIcon.PLUS, size = 4, color = Styles.strings)
                             onAction = EventHandler {
                                 log(LogLevels.INFO) { "adding a new task" }
                                 val task = Task()
@@ -91,9 +88,7 @@ class MainView : View("tmt") {
                     }
                     hbox {
                         jfxbutton {
-                            graphic = FontAwesomeIconView(FontAwesomeIcon.ARROW_LEFT)
-                            (graphic as FontAwesomeIconView).size = "2em"
-                            graphic.addClass(Styles.navigationButton)
+                            graphic = IconView(FontAwesomeIcon.ARROW_LEFT, Styles.accent, 2)
                             onAction = EventHandler {
                                 log(LogLevels.INFO) { "moving calendar view" }
                                 currentDay -= 7
@@ -116,8 +111,7 @@ class MainView : View("tmt") {
                             hbox {
                                 spacer()
                                 jfxbutton {
-                                    graphic = FontAwesomeIconView(FontAwesomeIcon.HOME)
-                                    (graphic as FontAwesomeIconView).size = "2em"
+                                    graphic = IconView(FontAwesomeIcon.HOME, Styles.foreground, 2)
                                     onAction = EventHandler {
                                         log(LogLevels.INFO) { "moving calendar view" }
                                         currentDay.value = initialDay
@@ -128,9 +122,7 @@ class MainView : View("tmt") {
                         }
                         spacer()
                         jfxbutton {
-                            graphic = FontAwesomeIconView(FontAwesomeIcon.ARROW_RIGHT)
-                            (graphic as FontAwesomeIconView).size = "2em"
-                            graphic.addClass(Styles.navigationButton)
+                            graphic = IconView(FontAwesomeIcon.ARROW_RIGHT, Styles.accent, 2)
                             onAction = EventHandler {
                                 log(LogLevels.INFO) { "moving calendar view" }
                                 currentDay += 7
